@@ -12,7 +12,7 @@ export const SignUp = () => {
     const [formData, setFormData] = useState({
         username: "",
         email: "",
-        password: ""
+        password: "",
     });
     
     const { username, email, password } = formData;
@@ -21,7 +21,7 @@ export const SignUp = () => {
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
-            [e.target.id]: e.target.value
+            [e.target.id]: e.target.value,
         }));
     };
 
@@ -36,7 +36,7 @@ export const SignUp = () => {
             const auth = getAuth();
             const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
             updateProfile(auth.currentUser, {
-                displayName: username
+                displayName: username,
             })
             const user = userCredentials.user;
             const formDataCopy = {...formData};

@@ -23,7 +23,7 @@ export const OAuth = () => {
                 await setDoc(docRef, {
                     username: username,
                     email: user.email,
-                    timestamp: serverTimestamp()
+                    timestamp: serverTimestamp(),
                 });
             }
             navigate('/');

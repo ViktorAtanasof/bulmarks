@@ -9,7 +9,7 @@ export const SignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
-        password: ""
+        password: "",
     });
     
     const { email, password } = formData;
@@ -18,7 +18,7 @@ export const SignIn = () => {
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
-            [e.target.id]: e.target.value
+            [e.target.id]: e.target.value,
         }));
     };
 
