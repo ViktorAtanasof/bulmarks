@@ -11,6 +11,7 @@ import SwiperCore, {
     Pagination
 } from 'swiper';
 import 'swiper/css/bundle';
+import { FaMapMarkerAlt } from 'react-icons/fa';
 
 export const Landmark = () => {
     const params = useParams();
@@ -52,12 +53,44 @@ export const Landmark = () => {
                                 background: `url(${landmark.imgUrls[index]}) center no-repeat`,
                                 backgroundSize: 'cover'
                             }}
-                        >
-
-                        </div>
+                        ></div>
                     </SwiperSlide>
                 })}
             </Swiper>
+            <div
+                className="m-4 flex flex-col md-flex-row max-w-6xl 
+                           lg:mx-auto p-4 rounded-lg shadow-lg bg-white 
+                           lg:space-x-5"
+            >
+                <div className="w-full h-[200px] lg-[400px]">
+                    <p className="text-2xl font-bold mb-3 text-[#222643]">
+                        {landmark.name}
+                    </p>
+                    <p className="flex items-center mt-6 mb-3 font-semibold">
+                        <FaMapMarkerAlt className="mr-1 text-green-700" />
+                        {landmark.address}
+                    </p>
+                    <div className="flex justify-start items-center space-x-4 w-[75%]">
+                        <p
+                            className="bg-blue-600 w-full max-w-[200px] rounded-md p-1 
+                                       text-white text-center font-semibold shadow-md"
+                        >
+                            {landmark.place}
+                        </p>
+                        <p
+                            className="bg-[#169d79] w-full max-w-[200px] rounded-md p-1 
+                                       text-white text-center font-semibold shadow-md"
+                        >
+                            {landmark.type}
+                        </p>
+                    </div>
+                    <p className="mt-3 mb-3">
+                        <span className="font-semibold">Description - </span>
+                        {landmark.description}
+                    </p>
+                </div>
+                <div className="w-full h-[200px] lg-[400px] z-10 overflox-x-hidden"></div>
+            </div>
         </main>
     );
 };
