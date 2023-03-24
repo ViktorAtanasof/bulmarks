@@ -1,14 +1,17 @@
 import { getAuth, updateProfile } from 'firebase/auth';
-import { doc, updateDoc } from 'firebase/firestore';
-import { useState } from 'react';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import { FcLandscape } from 'react-icons/fc';
+import { LandmarkItem } from '../components/LandmarkItem';
 
 export const Profile = () => {
     const auth = getAuth();
     const [changeDetail, setChangeDetail] = useState(false);
+    const [landmarks, setLandmarks] = useState(null);
+    const [loading, setLoading] = useState(false);
     const [formData, setFormData] = useState({
         username: auth.currentUser.displayName,
         email: auth.currentUser.email,
@@ -46,6 +49,44 @@ export const Profile = () => {
             toast.error('Could not update the profile details.');
         }
     }
+
+    useEffect(() => {
+        const fetchUserLandmarks = async () => {
+            const landmarkRef = collection(db, 'landmarks');
+            const q = query(
+                landmarkRef,
+                where('userRef', '==', auth.currentUser.uid),
+                orderBy('timestamp', 'desc')
+            );
+            const querySnap = await getDocs(q);
+            let landmarks = [];
+            querySnap.forEach((doc) => {
+                return landmarks.push({
+                    id: doc.id,
+                    data: doc.data(),
+                });
+            });
+            setLandmarks(landmarks);
+            setLoading(false);
+        };
+        fetchUserLandmarks();
+    }, [auth.currentUser.uid]);
+
+    const onDelete = async (landmarkId) => {
+        if(window.confirm('Are you sure you want to delete?')){
+            await deleteDoc(doc(db, 'landmarks', landmarkId));
+            const updatedLandmarks = landmarks.filter((landmark) => {
+                return landmark.id !== landmarkId;
+            });
+            setLandmarks(updatedLandmarks);
+            toast.success('Succesfully deleted the landmark.');
+        };
+    };
+
+    const onEdit = (landmarkId) => {
+        navigate(`/edit-landmark/${landmarkId}`);
+    };
+
     return (
         <>
             <section className='max-w-6xl mx-auto flex justify-center items-center flex-col'>
@@ -93,9 +134,9 @@ export const Profile = () => {
                             </p>
                         </div>
                     </form>
-                    <button 
-                    type="submit" 
-                    className='w-full bg-slate-600 text-blue-50 px-7 py-3 
+                    <button
+                        type="submit"
+                        className='w-full bg-slate-600 text-blue-50 px-7 py-3 
                                text-sm font-medium uppercase rounded shadow-md
                              hover:bg-slate-700 transition duration-150 ease-in-out
                              active:bg-slate-800'>
@@ -106,6 +147,24 @@ export const Profile = () => {
                     </button>
                 </div>
             </section>
+            <div className='max-w-6xl px-3 mt-6 mx-auto'>
+                {!loading && landmarks?.length > 0 && (
+                    <>
+                        <h2 className='text-2xl text-center font-semibold mb-6'>My marked landmarks</h2>
+                        <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
+                            {landmarks.map((landmark) => {
+                                return <LandmarkItem
+                                    key={landmark.id}
+                                    id={landmark.id}
+                                    landmark={landmark.data}
+                                    onDelete={() => onDelete(landmark.id)}
+                                    onEdit={() => onEdit(landmark.id)}
+                                />;
+                            })}
+                        </ul>
+                    </>
+                )}
+            </div>
         </>
     );
 };
