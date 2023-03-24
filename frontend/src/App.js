@@ -7,8 +7,13 @@ import { Landmarks } from './pages/Landmarks';
 import { Profile } from './pages/Profile';
 import { SignIn } from './pages/SignIn';
 import { SignUp } from './pages/SignUp';
+import { PrivateRoute } from './components/PrivateRoute';
 import { ForgotPassword } from './pages/ForgotPassword';
 import { Header } from './components/Header';
+import { CreateLandmark } from './pages/CreateLandmark';
+import { EditLandmark } from './pages/EditLandmark';
+import { Landmark } from './pages/Landmark';
+import { Category } from './pages/Category';
 
 function App() {
   return (
@@ -16,11 +21,21 @@ function App() {
       <Header />
       <Routes>
         <Route path='/' element={<Home />} />
-        <Route path='/landmarks' element={<Landmarks />} />
+        <Route path='/profile' element={<PrivateRoute />}>
+          <Route path='/profile' element={<Profile />} />
+        </Route>
         <Route path='/sign-in' element={<SignIn />} />
         <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/profile' element={<Profile />} />
         <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/category/:categoryName/:landmarkId' element={<Landmark />} />
+        <Route path='/category/:categoryName' element={<Category />} />
+        <Route path='/landmarks' element={<Landmarks />} />
+        <Route path='/create-landmark' element={<PrivateRoute />}>
+          <Route path='/create-landmark' element={<CreateLandmark />} />
+        </Route>
+        <Route path='/edit-landmark' element={<PrivateRoute />}>
+            <Route path='/edit-landmark/:landmarkId' element={<EditLandmark />}/>
+        </Route>
         <Route path='*' element={<h1>404 Not Found</h1>} />
       </Routes>
       <ToastContainer
