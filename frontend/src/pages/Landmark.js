@@ -12,6 +12,7 @@ import SwiperCore, {
 } from 'swiper';
 import 'swiper/css/bundle';
 import { FaMapMarkerAlt } from 'react-icons/fa';
+import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
 export const Landmark = () => {
     const params = useParams();
@@ -58,7 +59,7 @@ export const Landmark = () => {
                 })}
             </Swiper>
             <div
-                className="m-4 flex flex-col md-flex-row max-w-6xl 
+                className="m-4 flex flex-col md:flex-row max-w-6xl 
                            lg:mx-auto p-4 rounded-lg shadow-lg bg-white 
                            lg:space-x-5"
             >
@@ -89,7 +90,24 @@ export const Landmark = () => {
                         {landmark.description}
                     </p>
                 </div>
-                <div className="w-full h-[200px] lg-[400px] z-10 overflox-x-hidden"></div>
+                <div className="w-full h-[200px] md:h-[400px] z-10 overflox-x-hidden mt-6 md:mt-0 md:ml-2">
+                    <MapContainer
+                        center={[landmark.geolocation.lat, landmark.geolocation.lng]}
+                        zoom={13}
+                        scrollWheelZoom={false}
+                        style={{height: '100%', width: '100%'}}
+                    >
+                        <TileLayer
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={[landmark.geolocation.lat, landmark.geolocation.lng]}>
+                            <Popup>
+                                A pretty CSS3 popup. <br /> Easily customizable.
+                            </Popup>
+                        </Marker>
+                    </MapContainer>
+                </div>
             </div>
         </main>
     );
