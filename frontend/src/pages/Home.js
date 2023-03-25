@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { db } from "../firebase";
+import bulgaria from '../assets/images/bulgaria.jpg';
 
 export const Home = () => {
     // Small landmarks
@@ -63,8 +64,18 @@ export const Home = () => {
 
     return (
         <main>
-            <section>
-                <h1>Home</h1>
+            <section className="relative">
+                <img
+                    className="w-full h-[500px] object-cover brightness-75"
+                    src={bulgaria}
+                    alt="landscape" />
+                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                                text-center text-white">
+                    <p className="text-sm md:text-2xl tracking-widest">EXPLORE THE BEST</p>
+                    <h1 className="text-6xl md:text-8xl lg:text-9xl">
+                        <span className="text-[#3c637a]">Bul</span>garian Land<span className="text-[#03cb97]">marks</span>
+                    </h1>
+                </div>
             </section>
             <section className="max-w-6xl mx-auto pt-4 space-y-6">
                 {smallLandmarks && smallLandmarks.length > 0 && (
