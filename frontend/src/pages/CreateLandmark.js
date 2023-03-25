@@ -137,6 +137,7 @@ export const CreateLandmark = () => {
             geolocation,
             timestamp: serverTimestamp(),
             userRef: auth.currentUser.uid,
+            likes: [],
         };
         delete formDataCopy.images;
         delete formDataCopy.latitude;

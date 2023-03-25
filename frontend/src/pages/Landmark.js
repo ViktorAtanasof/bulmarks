@@ -13,9 +13,12 @@ import SwiperCore, {
 import 'swiper/css/bundle';
 import { FaMapMarkerAlt } from 'react-icons/fa';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { getAuth } from "firebase/auth";
+import { LikeLandmark } from "../components/LikeLandmark";
 
 export const Landmark = () => {
     const params = useParams();
+    const auth = getAuth();
     const [landmark, setLandmark] = useState(null);
     const [loading, setLoading] = useState(true);
     SwiperCore.use([Autoplay, Navigation, Pagination]);
@@ -89,13 +92,16 @@ export const Landmark = () => {
                         <span className="font-semibold">Description - </span>
                         {landmark.description}
                     </p>
+                    <div>
+                        {auth && <LikeLandmark id={params.landmarkId} likes={landmark.likes}/>}
+                    </div>
                 </div>
                 <div className="w-full h-[200px] md:h-[400px] z-10 overflox-x-hidden mt-6 md:mt-0 md:ml-2">
                     <MapContainer
                         center={[landmark.geolocation.lat, landmark.geolocation.lng]}
                         zoom={13}
                         scrollWheelZoom={false}
-                        style={{height: '100%', width: '100%'}}
+                        style={{ height: '100%', width: '100%' }}
                     >
                         <TileLayer
                             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
