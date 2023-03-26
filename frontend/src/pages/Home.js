@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { db } from "../firebase";
-import bulgaria from '../assets/images/bulgaria.jpg';
+import bulgaria from '../assets/images/bulgaria.webp';
 
 export const Home = () => {
     // Small landmarks

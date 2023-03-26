@@ -2,7 +2,7 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 
-import logo from '../assets/logo/logo.png';
+import logo from '../assets/logo/logo.webp';
 
 export const Header = () => {
     const [pageState, setPageState] = useState('Sign in');
@@ -10,7 +10,7 @@ export const Header = () => {
     const auth = getAuth();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            if(user) {
+            if (user) {
                 setPageState('Profile');
             } else {
                 setPageState('Sign in');
@@ -34,8 +34,7 @@ export const Header = () => {
                 </div>
                 <nav>
                     <ul className="flex space-x-10">
-                        <Link to="/">
-                            <li className={`
+                        <li className={`
                             cursor-pointer
                             py-3 
                             text-sm 
@@ -44,12 +43,10 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent 
                             ${pathMatchRoute("/") && "!font-bold !border-b-green-600"}`}
-                            >
-                                Home
-                            </li>
-                        </Link>
-                        <Link to="/landmarks">
-                            <li className={`
+                        >
+                            <Link to="/">Home</Link>
+                        </li>
+                        <li className={`
                             cursor-pointer
                             py-3 
                             text-sm 
@@ -58,12 +55,10 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent 
                             ${pathMatchRoute("/landmarks") && "!font-bold !border-b-green-600"}`}
-                            >
-                                Landmarks
-                            </li>
-                        </Link>
-                        <Link to="/profile">
-                            <li className={`
+                        >
+                            <Link to="/landmarks">Landmarks</Link>
+                        </li>
+                        <li className={`
                             cursor-pointer
                             py-3 
                             text-sm 
@@ -72,11 +67,10 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent
                             ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile"))
-                                && "!font-bold !border-b-green-600"}`}
-                            >
-                                {pageState}
-                            </li>
-                        </Link>
+                            && "!font-bold !border-b-green-600"}`}
+                        >
+                            <Link to="/profile">{pageState}</Link>
+                        </li>
                     </ul>
                 </nav>
             </header>
