@@ -8,44 +8,16 @@ import { Spinner } from "../components/Spinner";
 
 export const Home = () => {
     const [loading, setLoading] = useState(true);
-    // Small landmarks
     const [smallLandmarks, setSmallLandmarks] = useState(null);
-    useEffect(() => {
-        const fetchLandmarks = async () => {
-            try {
-                const landmarksRef = collection(db, 'landmarks');
-                const q = query(
-                    landmarksRef,
-                    where('size', '==', 'small'),
-                    orderBy('timestamp', 'desc'),
-                    limit(4),
-                );
-                const querySnap = await getDocs(q);
-                const landmarks = [];
-                querySnap.forEach((doc) => {
-                    return landmarks.push({
-                        id: doc.id,
-                        data: doc.data(),
-                    });
-                });
-                setSmallLandmarks(landmarks);
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchLandmarks();
-    }, []);
-
-    //Large landmarks
     const [largeLandmarks, setLargeLandmarks] = useState(null);
+
     useEffect(() => {
-        const fetchLandmarks = async () => {
+        const fetchLandmarks = async (size) => {
             try {
                 const landmarksRef = collection(db, 'landmarks');
                 const q = query(
                     landmarksRef,
-                    where('size', '==', 'large'),
+                    where('size', '==', size),
                     orderBy('timestamp', 'desc'),
                     limit(4),
                 );
@@ -57,13 +29,18 @@ export const Home = () => {
                         data: doc.data(),
                     });
                 });
-                setLargeLandmarks(landmarks);
+                if (size === 'small') {
+                    setSmallLandmarks(landmarks);
+                  } else if (size === 'large') {
+                    setLargeLandmarks(landmarks);
+                  }
                 setLoading(false);
             } catch (error) {
                 console.log(error);
             }
         }
-        fetchLandmarks();
+        fetchLandmarks('small');
+        fetchLandmarks('large');
     }, []);
 
     return (
