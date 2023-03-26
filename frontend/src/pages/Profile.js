@@ -148,9 +148,9 @@ export const Profile = () => {
                 </div>
             </section>
             <div className='max-w-6xl px-3 mt-6 mx-auto'>
+                <h2 className='text-2xl text-center font-semibold mb-6 pb-4 border-b-gray-300 border-b-2'>My marked landmarks</h2>
                 {!loading && landmarks?.length > 0 && (
                     <>
-                        <h2 className='text-2xl text-center font-semibold mb-6'>My marked landmarks</h2>
                         <ul className='sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'>
                             {landmarks.map((landmark) => {
                                 return <LandmarkItem
@@ -163,6 +163,9 @@ export const Profile = () => {
                             })}
                         </ul>
                     </>
+                )}
+                {landmarks?.length === 0 && (
+                    <p className='text-[22px] text-center  italic mt-10'>You have no marked landmarks yet.</p>
                 )}
             </div>
         </>

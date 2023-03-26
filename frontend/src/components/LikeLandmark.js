@@ -47,13 +47,11 @@ export const LikeLandmark = ({
                     likes: arrayRemove(user.uid),
                 });
                 setLiked(false);
-                console.log('unliked');
             } else {
                 await updateDoc(likesRef, {
                     likes: arrayUnion(user.uid),
                 });
                 setLiked(true);
-                console.log('liked');
             }
             const newLikesCount = liked ? likesCount - 1 : likesCount + 1;
             setLikesCount(newLikesCount);
@@ -64,19 +62,19 @@ export const LikeLandmark = ({
 
     return (
         <>
-            <div onClick={handleLike}>
+            <div>
                 {loading ? (
                     <Spinner />
                 ) : user && !isOwner && (
                     !liked
                         ? (
-                            <div className='flex items-center'>
+                            <div className='flex items-center' onClick={handleLike}>
                                 <AiOutlineHeart className='cursor-pointer mr-1' />
                                 <p> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
                             </div>
                         )
                         : (
-                            <div className='flex items-center'>
+                            <div className='flex items-center' onClick={handleLike}>
                                 <AiFillHeart className="text-red-700 cursor-pointer mr-1" />
                                 <p> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
                             </div>

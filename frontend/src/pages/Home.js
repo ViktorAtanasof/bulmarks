@@ -4,8 +4,10 @@ import { Link } from "react-router-dom";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { db } from "../firebase";
 import bulgaria from '../assets/images/bulgaria.webp';
+import { Spinner } from "../components/Spinner";
 
 export const Home = () => {
+    const [loading, setLoading] = useState(true);
     // Small landmarks
     const [smallLandmarks, setSmallLandmarks] = useState(null);
     useEffect(() => {
@@ -27,6 +29,7 @@ export const Home = () => {
                     });
                 });
                 setSmallLandmarks(landmarks);
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -55,6 +58,7 @@ export const Home = () => {
                     });
                 });
                 setLargeLandmarks(landmarks);
+                setLoading(false);
             } catch (error) {
                 console.log(error);
             }
@@ -77,48 +81,59 @@ export const Home = () => {
                     </h1>
                 </div>
             </section>
-            <section className="max-w-6xl mx-auto pt-4 space-y-6">
-                {smallLandmarks && smallLandmarks.length > 0 && (
-                    <div className="m-2 mb-6">
-                        <h2 className="px-3 text-2xl mt-6 font-semibold">Small landmarks</h2>
-                        <Link to="/category/small">
-                            <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
-                                Show more small landmarks
-                            </p>
-                        </Link>
-                        <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-                            {smallLandmarks.map((landmark) => (
-                                <LandmarkItem
-                                    key={landmark.id}
-                                    landmark={landmark.data}
-                                    id={landmark.id}
-                                />
-                            ))}
-                        </ul>
-                    </div>
+            <div>
+                {loading ? (
+                    <Spinner />
+                ) : (
+                    <>
+                        <section className="max-w-6xl mx-auto pt-4 space-y-6">
+                            {smallLandmarks && smallLandmarks?.length > 0 && (
+                                <div className="m-2 mb-6">
+                                    <h2 className="px-3 text-2xl mt-6 font-semibold">Small landmarks</h2>
+                                    <Link to="/category/small">
+                                        <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+                                            Show more small landmarks
+                                        </p>
+                                    </Link>
+                                    <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+                                        {smallLandmarks.map((landmark) => (
+                                            <LandmarkItem
+                                                key={landmark.id}
+                                                landmark={landmark.data}
+                                                id={landmark.id}
+                                            />
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </section>
+                        <section className="max-w-6xl mx-auto pt-4 space-y-6">
+                            {largeLandmarks && largeLandmarks?.length > 0 && (
+                                <div className="m-2 mb-6">
+                                    <h2 className="px-3 text-2xl mt-6 font-semibold">Large landmarks</h2>
+                                    <Link to="/category/large">
+                                        <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
+                                            Show more large landmarks
+                                        </p>
+                                    </Link>
+                                    <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
+                                        {largeLandmarks.map((landmark) => (
+                                            <LandmarkItem
+                                                key={landmark.id}
+                                                landmark={landmark.data}
+                                                id={landmark.id}
+                                            />
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+                        </section>
+                    </>
                 )}
-            </section>
-            <section className="max-w-6xl mx-auto pt-4 space-y-6">
-                {largeLandmarks && largeLandmarks.length > 0 && (
-                    <div className="m-2 mb-6">
-                        <h2 className="px-3 text-2xl mt-6 font-semibold">Large landmarks</h2>
-                        <Link to="/category/large">
-                            <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
-                                Show more large landmarks
-                            </p>
-                        </Link>
-                        <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-                            {largeLandmarks.map((landmark) => (
-                                <LandmarkItem
-                                    key={landmark.id}
-                                    landmark={landmark.data}
-                                    id={landmark.id}
-                                />
-                            ))}
-                        </ul>
-                    </div>
+                {smallLandmarks?.length === 0 && largeLandmarks?.length === 0 && (
+                    <p className="text-4xl text-center italic">No landmarks available.</p>
                 )}
-            </section>
+            </div>
         </main>
     );
 };

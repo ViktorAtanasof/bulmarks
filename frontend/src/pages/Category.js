@@ -77,7 +77,7 @@ export const Category = () => {
             </h1>
             {loading ? (
                 <Spinner />
-            ) : landmarks && landmarks.length > 0 ? (
+            ) : landmarks && landmarks?.length > 0 ? (
                 <>
                     <main>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
@@ -90,7 +90,7 @@ export const Category = () => {
                             })}
                         </ul>
                     </main>
-                    {lastFetchedLandmark && landmarks.length > 8 && (
+                    {lastFetchedLandmark && landmarks?.length > 8 && (
                         <div className="flex justify-center items-center">
                             <button
                                 onClick={onFetchMoreLandmarks}
