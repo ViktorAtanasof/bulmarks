@@ -14,6 +14,7 @@ import { CreateLandmark } from './pages/CreateLandmark';
 import { EditLandmark } from './pages/EditLandmark';
 import { Landmark } from './pages/Landmark';
 import { Category } from './pages/Category';
+import { NotFound } from './pages/NotFound';
 
 function App() {
   return (
@@ -36,7 +37,7 @@ function App() {
         <Route path='/edit-landmark' element={<PrivateRoute />}>
             <Route path='/edit-landmark/:landmarkId' element={<EditLandmark />}/>
         </Route>
-        <Route path='*' element={<h1>404 Not Found</h1>} />
+        <Route path='*' element={<NotFound />} />
       </Routes>
       <ToastContainer
         position="bottom-center"
