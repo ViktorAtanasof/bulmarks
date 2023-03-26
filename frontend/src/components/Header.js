@@ -43,7 +43,7 @@ export const Header = () => {
                             text-slate-800 
                             border-b-[3px] 
                             border-b-transparent 
-                            ${pathMatchRoute("/") && "font-bold border-b-green-600"}`}
+                            ${pathMatchRoute("/") && "!font-bold !border-b-green-600"}`}
                             >
                                 Home
                             </li>
@@ -57,7 +57,7 @@ export const Header = () => {
                           text-slate-800 
                             border-b-[3px] 
                             border-b-transparent 
-                            ${pathMatchRoute("/landmarks") && "font-bold border-b-green-600"}`}
+                            ${pathMatchRoute("/landmarks") && "!font-bold !border-b-green-600"}`}
                             >
                                 Landmarks
                             </li>
@@ -72,7 +72,7 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent
                             ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile"))
-                                && "font-bold border-b-green-600"}`}
+                                && "!font-bold !border-b-green-600"}`}
                             >
                                 {pageState}
                             </li>
