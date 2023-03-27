@@ -13,19 +13,19 @@
 ## Dependencies
 
 **Frontend**
-- [React 18.2.0]()
-- [React-router-dom 6.9.0]()
-- [Tailwind CSS 3.2.7]()
-- [Leaflet 1.9.3]()
-- [React-leaflet 4.2.1]()
-- [Swiper 9.1.1]()
-- [React-toastify 9.1.1]()
-- [React-icons 4.8.0]()
-- [UUID 9.0.0]()
+- [React 18.2.0](https://react.dev/)
+- [React-router-dom 6.9.0](https://reactrouter.com/en/main)
+- [Tailwind CSS 3.2.7](https://tailwindcss.com/)
+- [Leaflet 1.9.3](https://leafletjs.com/)
+- [React-leaflet 4.2.1](https://react-leaflet.js.org/)
+- [Swiper 9.1.1](https://swiperjs.com/)
+- [React-toastify 9.1.1](https://fkhadra.github.io/react-toastify/introduction/)
+- [React-icons 4.8.0](https://react-icons.github.io/react-icons)
+- [UUID 9.0.0](https://www.npmjs.com/package/uuid?activeTab=readme)
 
 **Backend**
 - [Firebase 9.17.2](https://firebase.google.com/)
-- [Dotenv-webpack 8.0.1]()
+- [Dotenv-webpack 8.0.1](https://www.npmjs.com/package/dotenv-webpack?activeTab=readme)
 
 
 
