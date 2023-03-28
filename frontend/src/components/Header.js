@@ -1,11 +1,12 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useEffect, useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
-
+import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import logo from '../assets/logo/logo.webp';
 
 export const Header = () => {
     const [pageState, setPageState] = useState('Sign in');
+    const [open, setOpen] = useState(false);
     const location = useLocation();
     const auth = getAuth();
     useEffect(() => {
@@ -26,14 +27,20 @@ export const Header = () => {
 
     return (
         <div className="bg-blue-50 border-b shadow-sm sticky top-0 z-40">
-            <header className="flex justify-between items-center px-3 max-w-6xl mx-auto">
+            <header className="md:flex justify-between items-center max-w-6xl md:px-3 md:mx-auto">
                 <div>
                     <Link to={"/"}>
-                        <img src={logo} alt="logo" className="h-12 cursor-pointer" />
+                        <img src={logo} alt="logo" className="h-12 cursor-pointer px-3" />
                     </Link>
                 </div>
                 <nav>
-                    <ul className="flex space-x-10">
+                    <div onClick={() => setOpen(!open)} className='text-3xl absolute right-3 top-3 cursor-pointer md:hidden'>
+                        {open
+                            ? <AiOutlineClose />
+                            : <AiOutlineMenu />
+                        }
+                    </div>
+                    <ul className={`absolute w-full bg-blue-50 md:static md:flex md:space-x-10 ${open ? 'left-0 top-[13]' : 'top-[-490px]'}`}>
                         <li className={`
                             cursor-pointer
                             py-3 
