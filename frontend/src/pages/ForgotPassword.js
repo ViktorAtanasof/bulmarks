@@ -3,6 +3,8 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+import lock from '../assets/images/lock.jpg';
+
 export const ForgotPassword = () => {
     const [email, setEmail] = useState("");
 
@@ -28,7 +30,7 @@ export const ForgotPassword = () => {
             <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
                 <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
                     <img
-                        src="https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        src={lock}
                         alt="key"
                         className="w-full rounded-2xl"
                     />

@@ -7,6 +7,9 @@ import { serverTimestamp, setDoc, doc } from 'firebase/firestore';
 import { toast } from 'react-toastify';
 import { OAuth } from '../components/OAuth';
 
+import lock from '../assets/images/lock.jpg';
+
+
 export const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -57,7 +60,7 @@ export const SignUp = () => {
             <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
                 <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
                     <img
-                        src="https://images.pexels.com/photos/101808/pexels-photo-101808.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                        src={lock}
                         alt="key"
                         className="w-full rounded-2xl"
                     />
