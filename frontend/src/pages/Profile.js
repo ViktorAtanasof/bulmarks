@@ -20,11 +20,6 @@ export const Profile = () => {
     const { username, email } = formData;
     const navigate = useNavigate();
 
-    const onLogout = () => {
-        auth.signOut();
-        navigate('/');
-    };
-
     const onChange = (e) => {
         setFormData((prevState) => ({
             ...prevState,
@@ -113,8 +108,8 @@ export const Profile = () => {
                                      text-gray-700 bg-gray-300 border border-gray-300
                                        rounded transition ease-in-out'
                         />
-                        <div className='flex justify-between whitespace-nowrap text-sm sm:text-lg'>
-                            <p className='flex items-center'>Do you want to change your username?
+                        <div className='mb-3 text-sm sm:text-lg'>
+                            <p className='flex'>Do you want to change your username?
                                 <span
                                     onClick={() => {
                                         changeDetail && onSubmit();
@@ -123,14 +118,8 @@ export const Profile = () => {
                                     className='text-green-600 hover:text-green-700 hover:underline
                                                  transition ease-in-out duration-200 ml-1 cursor-pointer'
                                 >
-                                    {changeDetail ? "Save change" : "Edit"}
+                                    {changeDetail ? "Save changes" : "Edit"}
                                 </span>
-                            </p>
-                            <p className='text-blue-600 hover:text-blue-800 hover:underline
-                                            transition duration-200 ease-in-out cursor-pointer'
-                                onClick={onLogout}
-                            >
-                                Sign out
                             </p>
                         </div>
                     </form>
