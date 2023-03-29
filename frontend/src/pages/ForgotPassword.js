@@ -19,7 +19,7 @@ export const ForgotPassword = () => {
             console.log(auth);
             await sendPasswordResetEmail(auth, email);
             toast.success('Email was sent.');
-        } catch(error) {
+        } catch (error) {
             toast.error('Could not send reset password.');
         }
     }
@@ -46,32 +46,33 @@ export const ForgotPassword = () => {
                             placeholder="Email address"
                             value={email}
                             onChange={onChange}
+                            required
                         />
-                    <button
-                        className="w-full bg-slate-600 text-blue-50 px-7 py-3 
+                        <button
+                            className="w-full bg-slate-600 text-blue-50 px-7 py-3 
                                    text-sm font-medium uppercase rounded shadow-md
                                    hover:bg-slate-700 transition duration-150 ease-in-out
                                    active:bg-slate-800"
-                        type='submit'
-                    >
-                        Reset password
-                    </button>
-                    <div
-                        className="flex my-4 items-center 
+                            type='submit'
+                        >
+                            Reset password
+                        </button>
+                        <div
+                            className="flex my-4 items-center 
                                    before:border-t before:flex-1 before:border-gray-300
                                    after:border-t after:flex-1 after:border-gray-300"
-                    >
-                        <p className="text-center font-semibold mx-4">OR</p>
-                    </div>
-                    <Link
-                        to="/sign-in"
-                        className="flex items-center justify-center w-full py-3 px-7
+                        >
+                            <p className="text-center font-semibold mx-4">OR</p>
+                        </div>
+                        <Link
+                            to="/sign-in"
+                            className="flex items-center justify-center w-full py-3 px-7
                         bg-blue-600 text-blue-50 uppercase text-sm font-medium
                         hover:bg-blue-800 transition duration-150 ease-in-out 
                         active:bg-blue-900 shadow-md rounded"
-                    >
-                        Go back
-                    </Link>
+                        >
+                            Go back
+                        </Link>
                     </form>
                 </div>
             </div>
