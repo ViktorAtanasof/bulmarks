@@ -6,29 +6,30 @@ import { toast } from 'react-toastify';
 import { db } from '../firebase';
 import { FcLandscape } from 'react-icons/fc';
 import { LandmarkItem } from '../components/LandmarkItem';
+import { useForm } from "react-hook-form";
 
 export const Profile = () => {
     const auth = getAuth();
     const [changeDetail, setChangeDetail] = useState(false);
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(false);
-    const [formData, setFormData] = useState({
-        username: auth.currentUser.displayName,
-        email: auth.currentUser.email,
-    });
+    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+        defaultValues: {
+            username: auth.currentUser.displayName,
+            email: auth.currentUser.email,
+        }
+    })
 
-    const { username, email } = formData;
     const navigate = useNavigate();
 
-    const onChange = (e) => {
-        setFormData((prevState) => ({
-            ...prevState,
-            [e.target.id]: e.target.value,
-        }))
-    }
+    const onChangeUsername = (e) => {
+        const trimmedUsername = e.target.value.replace(/\s/g, '');
+        setValue('username', trimmedUsername);
+    };
 
-    const onSubmit = async () => {
+    const onSubmit = async (data) => {
         try {
+            const username = data.username;
             if (auth.currentUser.displayName !== username) {
                 await updateProfile(auth.currentUser, {
                     displayName: username,
@@ -68,7 +69,7 @@ export const Profile = () => {
     }, [auth.currentUser.uid]);
 
     const onDelete = async (landmarkId) => {
-        if(window.confirm('Are you sure you want to delete?')){
+        if (window.confirm('Are you sure you want to delete?')) {
             await deleteDoc(doc(db, 'landmarks', landmarkId));
             const updatedLandmarks = landmarks.filter((landmark) => {
                 return landmark.id !== landmarkId;
@@ -87,22 +88,38 @@ export const Profile = () => {
             <section className='max-w-6xl mx-auto flex justify-center items-center flex-col'>
                 <h1 className="text-3xl text-center mt-6 font-bold">My Profile</h1>
                 <div className='w-full md:w-[50%] mt-6 px-3'>
-                    <form>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <input
                             type="text"
                             id="username"
-                            value={username}
+                            {...register('username', {
+                                required: true,
+                                minLength: 3,
+                                maxLength: 20,
+                            })}
+                            onChange={onChangeUsername}
                             disabled={!changeDetail}
-                            onChange={onChange}
-                            className={`w-full px-4 py-2 text-xl mb-6
+                            className={`w-full px-4 py-2 text-xl
                                      text-gray-700 bg-gray-300 border border-gray-300
                                        rounded transition ease-in-out
-                                       ${changeDetail && 'bg-zinc-50'}`}
+                                       ${changeDetail && 'bg-zinc-50'}
+                                       ${errors.username && 'border-red-600 border-2'}`}
                         />
+                        <div className='mb-6'>
+                            {errors.username && errors.username.type === 'required' && (
+                                <p className="text-red-500">Username can't be an empty string.</p>
+                            )}
+                            {errors.username && errors.username.type === 'minLength' && (
+                                <p className="text-red-500">Username must be at least 3 characters long.</p>
+                            )}
+                            {errors.username && errors.username.type === 'maxLength' && (
+                                <p className="text-red-500">Username must be less than 20 characters long.</p>
+                            )}
+                        </div>
                         <input
                             type="email"
                             id="email"
-                            value={email}
+                            {...register('email')}
                             disabled
                             className='w-full px-4 py-2 text-xl mb-6
                                      text-gray-700 bg-gray-300 border border-gray-300
@@ -110,16 +127,16 @@ export const Profile = () => {
                         />
                         <div className='mb-3 text-sm sm:text-lg'>
                             <p className='flex'>Do you want to change your username?
-                                <span
+                                <input
+                                    type="submit"
+                                    className='text-green-600 hover:text-green-700 hover:underline
+                                    transition ease-in-out duration-200 ml-1 cursor-pointer'
                                     onClick={() => {
-                                        changeDetail && onSubmit();
+                                        changeDetail && handleSubmit(onSubmit);
                                         setChangeDetail((prevState => !prevState));
                                     }}
-                                    className='text-green-600 hover:text-green-700 hover:underline
-                                                 transition ease-in-out duration-200 ml-1 cursor-pointer'
-                                >
-                                    {changeDetail ? "Save changes" : "Edit"}
-                                </span>
+                                    value={changeDetail ? "Save changes" : "Edit"}
+                                />
                             </p>
                         </div>
                     </form>
