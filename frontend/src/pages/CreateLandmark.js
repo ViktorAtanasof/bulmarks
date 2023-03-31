@@ -33,7 +33,6 @@ export const CreateLandmark = () => {
         setValue('size', e.target.value);
         const newSize = watch('size');
         setSize(newSize);
-        console.log(newSize);
     };
 
     const onSubmit = async (data) => {
@@ -52,7 +51,6 @@ export const CreateLandmark = () => {
                 &key=${process.env.REACT_APP_GEOCODE_API_KEY}`
             );
             const fetchedData = await response.json();
-            console.log(fetchedData);
             geolocation.lat = fetchedData.results[0]?.geometry.location.lat ?? 0;
             geolocation.lng = fetchedData.results[0]?.geometry.location.lng ?? 0;
 
@@ -245,7 +243,7 @@ export const CreateLandmark = () => {
                         text-gray-700 bg-white border border-gray-300 
                         rounded transition duration-150 ease-in-out focus:text-gray-700
                         focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.name && 'border-red-600 border-1'}`}
+                        ${errors.place && 'border-red-600 border-1'}`}
                 />
                 {errors.place && (
                     <div className='mb-4'>
@@ -272,7 +270,7 @@ export const CreateLandmark = () => {
                         text-gray-700 bg-white border border-gray-300 
                         rounded transition duration-150 ease-in-out focus:text-gray-700
                         focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.name && 'border-red-600 border-1'}`}
+                        ${errors.address && 'border-red-600 border-1'}`}
                 />
                 {errors.address && (
                     <div className='mb-4'>
@@ -331,7 +329,7 @@ export const CreateLandmark = () => {
                         text-gray-700 bg-white border border-gray-300 
                         rounded transition duration-150 ease-in-out focus:text-gray-700
                         focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.name && 'border-red-600 border-1'}`}
+                        ${errors.description && 'border-red-600 border-1'}`}
                 />
                 {errors.description && (
                     <div className='mb-4'>
