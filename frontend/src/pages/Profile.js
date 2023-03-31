@@ -99,23 +99,25 @@ export const Profile = () => {
                             })}
                             onChange={onChangeUsername}
                             disabled={!changeDetail}
-                            className={`w-full px-4 py-2 text-xl
+                            className={`w-full px-4 py-2 text-xl mb-4
                                      text-gray-700 bg-gray-300 border border-gray-300
                                        rounded transition ease-in-out
                                        ${changeDetail && 'bg-zinc-50'}
                                        ${errors.username && 'border-red-600 border-2'}`}
                         />
-                        <div className='mb-6'>
-                            {errors.username && errors.username.type === 'required' && (
-                                <p className="text-red-500">Username can't be an empty string.</p>
-                            )}
-                            {errors.username && errors.username.type === 'minLength' && (
-                                <p className="text-red-500">Username must be at least 3 characters long.</p>
-                            )}
-                            {errors.username && errors.username.type === 'maxLength' && (
-                                <p className="text-red-500">Username must be less than 20 characters long.</p>
-                            )}
-                        </div>
+                        {errors.username && (
+                            <div className='mb-4'>
+                                {errors.username.type === 'required' && (
+                                    <p className="text-red-500">Username can't be an empty string.</p>
+                                )}
+                                {errors.username.type === 'minLength' && (
+                                    <p className="text-red-500">Username must be at least 3 characters long.</p>
+                                )}
+                                {errors.username.type === 'maxLength' && (
+                                    <p className="text-red-500">Username must be less than 20 characters long.</p>
+                                )}
+                            </div>
+                        )}
                         <input
                             type="email"
                             id="email"
