@@ -1,28 +1,27 @@
 import { getAuth, sendPasswordResetEmail } from 'firebase/auth';
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useForm } from 'react-hook-form';
 
 import lock from '../assets/images/lock.jpg';
 
 export const ForgotPassword = () => {
-    const [email, setEmail] = useState("");
+    const { register, handleSubmit, formState: { errors } } = useForm({
+        defaultValues: {
+            email: "",
+        }
+    });
 
-    const onChange = (e) => {
-        setEmail(e.target.value);
-    };
-
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
         try {
             const auth = getAuth();
             console.log(auth);
-            await sendPasswordResetEmail(auth, email);
+            await sendPasswordResetEmail(auth, data.email);
             toast.success('Email was sent.');
         } catch (error) {
             toast.error('Could not send reset password.');
-        }
-    }
+        };
+    };
 
     return (
         <section>
@@ -36,18 +35,32 @@ export const ForgotPassword = () => {
                     />
                 </div>
                 <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-                    <form onSubmit={onSubmit}>
+                    <form onSubmit={handleSubmit(onSubmit)}>
                         <input
-                            className="w-full px-4 py-2 text-xl mb-6
+                            className={`w-full px-4 py-2 text-xl mb-4
                                      text-gray-700 bg-white border-gray-300 
-                                       rounded transition ease-in-out"
+                                       rounded transition ease-in-out
+                                       ${errors.email && 'border-red-600 border-1'}`}
                             type="email"
                             id="email"
                             placeholder="Email address"
-                            value={email}
-                            onChange={onChange}
-                            required
+                            {...register('email', {
+                                required: true,
+                                pattern: /^[\w]+@[\w-]+\.+[\w-]{2,4}$/g,
+                            })}
                         />
+                        {errors.email && (
+                            <div className='mb-4 px-1'>
+                                {errors.email.type === 'required' && (
+                                    <p className="text-red-500">Email can't be an empty string.</p>
+                                )}
+                                {errors.email.type === 'pattern' && (
+                                    <p className="text-red-500">
+                                        The email address you entered is not valid. It should be in the format <strong>username@example.com</strong>.
+                                    </p>
+                                )}
+                            </div>
+                        )}
                         <button
                             className="w-full bg-slate-600 text-blue-50 px-7 py-3 
                                    text-sm font-medium uppercase rounded shadow-md

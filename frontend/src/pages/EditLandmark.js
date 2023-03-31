@@ -7,6 +7,7 @@ import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from 'react-router-dom';
+import { useForm } from "react-hook-form";
 
 export const EditLandmark = () => {
     const navigate = useNavigate();
@@ -14,47 +15,40 @@ export const EditLandmark = () => {
     const [geolocationEnabled, setGeolocationEnabled] = useState(true);
     const [loading, setLoading] = useState(false);
     const [landmark, setLandmark] = useState(null);
-    const [formData, setFormData] = useState({
-        size: "large",
-        name: "",
-        type: "",
-        place: "",
-        address: "",
-        description: "",
-        latitude: 0,
-        longitude: 0,
-        images: {},
+    const [size, setSize] = useState('large');
+    const [initialValues, setInitialValues] = useState({});
+    const { register, handleSubmit, formState: { errors }, setValue, watch } = useForm({
+        defaultValues: {
+            size: "large",
+            name: "",
+            type: "",
+            place: "",
+            address: "",
+            description: "",
+            latitude: 0,
+            longitude: 0,
+            images: {},
+        }
     });
-
-    const {
-        size,
-        name,
-        type,
-        place,
-        address,
-        description,
-        latitude,
-        longitude,
-        images,
-    } = formData;
-
     const params = useParams();
-
+    
     useEffect(() => {
         if (landmark && landmark.userRef !== auth.currentUser.uid) {
             toast.error('You cannot edit this landmark');
             navigate('/');
         }
     }, [landmark, auth.currentUser.uid, navigate]);
-
+    
     useEffect(() => {
         setLoading(true);
         const fetchLandmark = async () => {
             const docRef = doc(db, 'landmarks', params.landmarkId);
             const docSnap = await getDoc(docRef);
             if (docSnap.exists()) {
-                setLandmark(docSnap.data());
-                setFormData({ ...docSnap.data() });
+                const landmarkData = docSnap.data();
+                setLandmark(landmarkData);
+                setSize(landmarkData.size);
+                setInitialValues({ ...landmarkData });
                 setLoading(false);
             } else {
                 navigate('/');
@@ -63,28 +57,23 @@ export const EditLandmark = () => {
         };
         fetchLandmark();
     }, [navigate, params.landmarkId]);
+    
+    useEffect(() => {
+        Object.keys(initialValues).forEach((key) => {
+            setValue(key, initialValues[key]);
+        });
+    }, [initialValues, setValue]);
 
-    const onChange = (e) => {
-        //Files
-        if (e.target.files) {
-            setFormData((prevState) => ({
-                ...prevState,
-                images: e.target.files,
-            }));
-        };
-        //Text
-        if (!e.target.files) {
-            setFormData((prevState) => ({
-                ...prevState,
-                [e.target.id]: e.target.value,
-            }));
-        };
+    const onChangeSize = (e) => {
+        setValue('size', e.target.value);
+        const newSize = watch('size');
+        setSize(newSize);
+        console.log(newSize);
     };
 
-    const onSubmit = async (e) => {
-        e.preventDefault();
+    const onSubmit = async (data) => {
         setLoading(true);
-        if (images?.length > 6) {
+        if (data.images?.length > 6) {
             setLoading(false);
             toast.error('Maximum 6 images are allowed.');
             return;
@@ -94,23 +83,23 @@ export const EditLandmark = () => {
         let location;
         if (geolocationEnabled) {
             const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?address=${address}
+                `https://maps.googleapis.com/maps/api/geocode/json?address=${data.address}
                 &key=${process.env.REACT_APP_GEOCODE_API_KEY}`
             );
-            const data = await response.json();
-            console.log(data);
-            geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
-            geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
+            const fetchedData = await response.json();
+            console.log(fetchedData);
+            geolocation.lat = fetchedData.results[0]?.geometry.location.lat ?? 0;
+            geolocation.lng = fetchedData.results[0]?.geometry.location.lng ?? 0;
 
-            location = data.status === 'ZERO_RESULTS' && undefined;
+            location = fetchedData.status === 'ZERO_RESULTS' && undefined;
             if (location === undefined) {
                 setLoading(false);
                 toast.error('Please enter a correct address.');
                 return;
             }
         } else {
-            geolocation.lat = latitude;
-            geolocation.lng = longitude;
+            geolocation.lat = data.latitude;
+            geolocation.lng = data.longitude;
         };
 
         const storeImage = async (img) => {
@@ -151,7 +140,7 @@ export const EditLandmark = () => {
         };
 
         const imgUrls = await Promise.all(
-            [...images].map((img) => storeImage(img))
+            [...data.images].map((img) => storeImage(img))
         ).catch((error) => {
             setLoading(false);
             toast.error('Images not uploaded.');
@@ -159,7 +148,7 @@ export const EditLandmark = () => {
         });
 
         const formDataCopy = {
-            ...formData,
+            ...data,
             imgUrls,
             geolocation,
             timestamp: serverTimestamp(),
@@ -185,14 +174,14 @@ export const EditLandmark = () => {
     return (
         <main className="max-w-md px-2 mx-auto">
             <h1 className="text-3xl text-center mt-6 font-bold">Edit Landmark</h1>
-            <form onSubmit={onSubmit}>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <p className="text-lg mt-6 font-semibold">Small / Large</p>
                 <div className="flex">
                     <button
                         type="button"
                         id="size"
                         value="small"
-                        onClick={onChange}
+                        onClick={onChangeSize}
                         className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded 
                                     hover:shadow-lg focus:shadow-lg active:shadow-lg transition
                                     duration-150 ease-in-out w-full ${size === "large"
@@ -208,7 +197,7 @@ export const EditLandmark = () => {
                         type="button"
                         id="size"
                         value="large"
-                        onClick={onChange}
+                        onClick={onChangeSize}
                         className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded 
                                     hover:shadow-lg focus:shadow-lg active:shadow-lg transition
                                     duration-150 ease-in-out w-full ${size === "small"
@@ -225,60 +214,110 @@ export const EditLandmark = () => {
                 <input
                     type="text"
                     id="name"
-                    value={name}
-                    onChange={onChange}
                     placeholder="Name"
-                    minLength={"5"}
-                    maxLength={"80"}
-                    required
-                    className="w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-6"
+                    {...register('name', {
+                        required: true,
+                        minLength: 5,
+                        maxLength: 80,
+                    })}
+                    className={`w-full px-4 py-2 text-xl 
+                    text-gray-700 bg-white border border-gray-300 
+                    rounded transition duration-150 ease-in-out focus:text-gray-700
+                    focus:bg-white focus:border-slate-600 mb-4
+                    ${errors.name && 'border-red-600 border-1'}`}
                 />
+                {errors.name && (
+                    <div className='mb-4'>
+                        {errors.name.type === 'required' && (
+                            <p className="text-red-500">Name can't be an empty string.</p>
+                        )}
+                        {errors.name.type === 'minLength' && (
+                            <p className="text-red-500">Name must be at least 5 characters long.</p>
+                        )}
+                        {errors.name.type === 'maxLength' && (
+                            <p className="text-red-500">Password must be less than 80 characters long.</p>
+                        )}
+                    </div>
+                )}
                 <label htmlFor="type" className="text-lg font-semibold block">Type</label>
                 <input
                     type="text"
                     id="type"
-                    value={type}
-                    onChange={onChange}
                     placeholder="Type"
-                    minLength={"5"}
-                    maxLength={"30"}
-                    required
-                    className="w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-6"
+                    {...register('type', {
+                        required: true,
+                        minLength: 5,
+                        maxLength: 30,
+                    })}
+                    className={`w-full px-4 py-2 text-xl 
+                    text-gray-700 bg-white border border-gray-300 
+                    rounded transition duration-150 ease-in-out focus:text-gray-700
+                    focus:bg-white focus:border-slate-600 mb-4
+                    ${errors.type && 'border-red-600 border-1'}`}
                 />
+                {errors.type && (
+                    <div className='mb-4'>
+                        {errors.type.type === 'required' && (
+                            <p className="text-red-500">Type can't be an empty string.</p>
+                        )}
+                        {errors.type.type === 'minLength' && (
+                            <p className="text-red-500">Type must be at least 5 characters long.</p>
+                        )}
+                        {errors.type.type === 'maxLength' && (
+                            <p className="text-red-500">Type must be less than 30 characters long.</p>
+                        )}
+                    </div>
+                )}
                 <label htmlFor="place" className="text-lg font-semibold block">City / Town / Village</label>
                 <input
                     type="text"
                     id="place"
-                    value={place}
-                    onChange={onChange}
+                    {...register('place', {
+                        required: true,
+                        minLength: 4,
+                        maxLength: 20,
+                    })}
                     placeholder="Location"
-                    minLength={"4"}
-                    maxLength={"20"}
-                    required
-                    className="w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-6"
+                    className={`w-full px-4 py-2 text-xl 
+                    text-gray-700 bg-white border border-gray-300 
+                    rounded transition duration-150 ease-in-out focus:text-gray-700
+                    focus:bg-white focus:border-slate-600 mb-4
+                    ${errors.place && 'border-red-600 border-1'}`}
                 />
+                {errors.place && (
+                    <div className='mb-4'>
+                        {errors.place.type === 'required' && (
+                            <p className="text-red-500">Place can't be an empty string.</p>
+                        )}
+                        {errors.place.type === 'minLength' && (
+                            <p className="text-red-500">Place must be at least 4 characters long.</p>
+                        )}
+                        {errors.place.type === 'maxLength' && (
+                            <p className="text-red-500">Place must be less than 20 characters long.</p>
+                        )}
+                    </div>
+                )}
                 <label htmlFor="address" className="text-lg font-semibold block">Address</label>
                 <textarea
                     type="text"
                     id="address"
-                    value={address}
-                    onChange={onChange}
+                    {...register('address', {
+                        required: true,
+                    })}
                     placeholder="Address"
-                    required
-                    className="w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-6"
+                    className={`w-full px-4 py-2 text-xl 
+                    text-gray-700 bg-white border border-gray-300 
+                    rounded transition duration-150 ease-in-out focus:text-gray-700
+                    focus:bg-white focus:border-slate-600 mb-4
+                    ${errors.address && 'border-red-600 border-1'}`}
                 />
+                {errors.address && (
+                    <div className='mb-4'>
+                        {errors.address.type === 'required' && (
+                            <p className="text-red-500">Address can't be an empty string.</p>
+                        )}
+                    </div>
+                )}
                 {!geolocationEnabled && (
                     <div className="flex space-x-6 justify-start mb-6">
                         <div>
@@ -286,8 +325,9 @@ export const EditLandmark = () => {
                             <input
                                 type="number"
                                 id="latitude"
-                                value={latitude}
-                                onChange={onChange}
+                                {...register('latitude', {
+                                    required: true,
+                                })}
                                 required
                                 min="-90"
                                 max="90"
@@ -302,8 +342,9 @@ export const EditLandmark = () => {
                             <input
                                 type="number"
                                 id="longitude"
-                                value={longitude}
-                                onChange={onChange}
+                                {...register('longitude', {
+                                    required: true,
+                                })}
                                 required
                                 min="-180"
                                 max="180"
@@ -319,29 +360,54 @@ export const EditLandmark = () => {
                 <textarea
                     type="text"
                     id="description"
-                    value={description}
-                    onChange={onChange}
+                    {...register('description', {
+                        required: true,
+                        minLength: 3,
+                        maxLength: 700,
+                    })}
                     placeholder="Description"
                     required
-                    className="w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-6"
+                    className={`w-full px-4 py-2 text-xl 
+                    text-gray-700 bg-white border border-gray-300 
+                    rounded transition duration-150 ease-in-out focus:text-gray-700
+                    focus:bg-white focus:border-slate-600 mb-4
+                    ${errors.description && 'border-red-600 border-1'}`}
                 />
+                {errors.description && (
+                    <div className='mb-4'>
+                        {errors.description.type === 'required' && (
+                            <p className="text-red-500">Description can't be an empty string.</p>
+                        )}
+                        {errors.description.type === 'minLength' && (
+                            <p className="text-red-500">Description must be at least 3 characters long.</p>
+                        )}
+                        {errors.description.type === 'maxLength' && (
+                            <p className="text-red-500">Description must be less than 700 characters long.</p>
+                        )}
+                    </div>
+                )}
                 <div className="mb-6">
                     <label htmlFor="images" className="text-lg font-semibold block">Images</label>
                     <p className="text-gray-600">The first image will be the cover (max 6 images)</p>
                     <input
                         type="file"
                         id="images"
-                        onChange={onChange}
+                        {...register('images', {
+                            required: true,
+                        })}
                         accept=".jpg,.png,.jpeg"
                         multiple
-                        required
                         className="w-full px-3 py-1.5 text-gray-700 bg-white border 
                             border-gray-300 rounded transition duration-150 ease-in-out
                             focus:bg-white focus:border-slate-600"
                     />
+                    {errors.images && (
+                        <div className="mb-4">
+                            {errors.images.type === 'required' && (
+                                <p className="text-red-500">At least 1 image is required.</p>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <button
                     type="submit"
