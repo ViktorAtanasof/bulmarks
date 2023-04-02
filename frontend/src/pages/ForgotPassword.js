@@ -15,7 +15,6 @@ export const ForgotPassword = () => {
     const onSubmit = async (data) => {
         try {
             const auth = getAuth();
-            console.log(auth);
             await sendPasswordResetEmail(auth, data.email);
             toast.success('Email was sent.');
         } catch (error) {

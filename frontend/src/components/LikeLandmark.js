@@ -56,7 +56,7 @@ export const LikeLandmark = ({
             const newLikesCount = liked ? likesCount - 1 : likesCount + 1;
             setLikesCount(newLikesCount);
         } catch (error) {
-            toast.error('Idk.');
+            toast.error('Something went wrong.');
         }
     };
 
