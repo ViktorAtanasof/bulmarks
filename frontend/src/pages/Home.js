@@ -1,10 +1,9 @@
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { LandmarkItem } from "../components/LandmarkItem";
 import { db } from "../firebase";
 import bulgaria from '../assets/images/bulgaria.webp';
 import { Spinner } from "../components/Spinner";
+import { LandmarkCategory } from "../components/LandmarkCategory";
 
 export const Home = () => {
     const [loading, setLoading] = useState(true);
@@ -31,9 +30,9 @@ export const Home = () => {
                 });
                 if (size === 'small') {
                     setSmallLandmarks(landmarks);
-                  } else if (size === 'large') {
+                } else if (size === 'large') {
                     setLargeLandmarks(landmarks);
-                  }
+                }
                 setLoading(false);
             } catch (error) {
                 console.log(error);
@@ -65,44 +64,10 @@ export const Home = () => {
                     <>
                         <section className="max-w-6xl mx-auto pt-4 space-y-6">
                             {smallLandmarks && smallLandmarks?.length > 0 && (
-                                <div className="m-2 mb-6">
-                                    <h2 className="px-3 text-2xl mt-6 font-semibold">Small landmarks</h2>
-                                    <Link to="/category/small">
-                                        <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
-                                            Show more small landmarks
-                                        </p>
-                                    </Link>
-                                    <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-                                        {smallLandmarks.map((landmark) => (
-                                            <LandmarkItem
-                                                key={landmark.id}
-                                                landmark={landmark.data}
-                                                id={landmark.id}
-                                            />
-                                        ))}
-                                    </ul>
-                                </div>
+                                <LandmarkCategory landmarks={smallLandmarks} category={"small"} />
                             )}
-                        </section>
-                        <section className="max-w-6xl mx-auto pt-4 space-y-6">
                             {largeLandmarks && largeLandmarks?.length > 0 && (
-                                <div className="m-2 mb-6">
-                                    <h2 className="px-3 text-2xl mt-6 font-semibold">Large landmarks</h2>
-                                    <Link to="/category/large">
-                                        <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
-                                            Show more large landmarks
-                                        </p>
-                                    </Link>
-                                    <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 ">
-                                        {largeLandmarks.map((landmark) => (
-                                            <LandmarkItem
-                                                key={landmark.id}
-                                                landmark={landmark.data}
-                                                id={landmark.id}
-                                            />
-                                        ))}
-                                    </ul>
-                                </div>
+                                <LandmarkCategory landmarks={largeLandmarks} category={"large"} />
                             )}
                         </section>
                     </>
