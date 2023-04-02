@@ -1,7 +1,6 @@
 import { Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import { Home } from './pages/Home';
 import { Landmarks } from './pages/Landmarks';
 import { Profile } from './pages/Profile';
@@ -15,6 +14,7 @@ import { EditLandmark } from './pages/EditLandmark';
 import { Landmark } from './pages/Landmark';
 import { Category } from './pages/Category';
 import { NotFound } from './pages/NotFound';
+import { PublicRoute } from './components/PublicRoute';
 
 function App() {
   return (
@@ -25,9 +25,15 @@ function App() {
         <Route path='/profile' element={<PrivateRoute />}>
           <Route path='/profile' element={<Profile />} />
         </Route>
-        <Route path='/sign-in' element={<SignIn />} />
-        <Route path='/sign-up' element={<SignUp />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
+        <Route path='/sign-in' element={<PublicRoute />}>
+          <Route path='/sign-in' element={<SignIn />} />
+        </Route>
+        <Route path='/sign-up' element={<PublicRoute />}>
+          <Route path='/sign-up' element={<SignUp />} />
+        </Route>
+        <Route path='/forgot-password' element={<PublicRoute />}>
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+        </Route>
         <Route path='/category/:categoryName/:landmarkId' element={<Landmark />} />
         <Route path='/category/:categoryName' element={<Category />} />
         <Route path='/landmarks' element={<Landmarks />} />
@@ -35,7 +41,7 @@ function App() {
           <Route path='/create-landmark' element={<CreateLandmark />} />
         </Route>
         <Route path='/edit-landmark' element={<PrivateRoute />}>
-            <Route path='/edit-landmark/:landmarkId' element={<EditLandmark />}/>
+          <Route path='/edit-landmark/:landmarkId' element={<EditLandmark />} />
         </Route>
         <Route path='*' element={<NotFound />} />
       </Routes>
