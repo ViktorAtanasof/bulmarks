@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import { handleGeolocation } from "../utils/handleGeolocation";
 import { storeImage } from "../services/storageService";
 import { SizeButton } from "../components/SizeButton";
+import { InputField } from "../components/InputField";
 
 export const CreateLandmark = () => {
     const navigate = useNavigate();
@@ -97,93 +98,39 @@ export const CreateLandmark = () => {
                 <div className="flex">
                         <SizeButton onChangeSize={onChangeSize} size={size}/>
                 </div>
-                <label htmlFor="name" className="text-lg mt-6 font-semibold block">Name</label>
-                <input
-                    type="text"
-                    id="name"
-                    {...register('name', {
-                        required: true,
-                        minLength: 5,
-                        maxLength: 80,
-                    })}
+                <InputField
+                    label="Name"
+                    name="name"
                     placeholder="Name"
-                    className={`w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.name && 'border-red-600 border-1'}`}
-                />
-                {errors.name && (
-                    <div className='mb-4'>
-                        {errors.name.type === 'required' && (
-                            <p className="text-red-500">Name can't be an empty string.</p>
-                        )}
-                        {errors.name.type === 'minLength' && (
-                            <p className="text-red-500">Name must be at least 5 characters long.</p>
-                        )}
-                        {errors.name.type === 'maxLength' && (
-                            <p className="text-red-500">Password must be less than 80 characters long.</p>
-                        )}
-                    </div>
-                )}
-                <label htmlFor="type" className="text-lg font-semibold block">Type</label>
-                <input
+                    register={register}
+                    errors={errors}
+                    minLength={5}
+                    maxLength={80}
+                    required={true}
                     type="text"
-                    id="type"
-                    {...register('type', {
-                        required: true,
-                        minLength: 5,
-                        maxLength: 30,
-                    })}
+                />
+                <InputField
+                    label="Type"
+                    name="type"
                     placeholder="Type"
-                    className={`w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.type && 'border-red-600 border-1'}`}
-                />
-                {errors.type && (
-                    <div className='mb-4'>
-                        {errors.type.type === 'required' && (
-                            <p className="text-red-500">Type can't be an empty string.</p>
-                        )}
-                        {errors.type.type === 'minLength' && (
-                            <p className="text-red-500">Type must be at least 5 characters long.</p>
-                        )}
-                        {errors.type.type === 'maxLength' && (
-                            <p className="text-red-500">Type must be less than 30 characters long.</p>
-                        )}
-                    </div>
-                )}
-                <label htmlFor="place" className="text-lg font-semibold block">City / Town / Village</label>
-                <input
+                    register={register}
+                    errors={errors}
+                    minLength={5}
+                    maxLength={30}
+                    required={true}
                     type="text"
-                    id="place"
-                    {...register('place', {
-                        required: true,
-                        minLength: 4,
-                        maxLength: 20,
-                    })}
-                    placeholder="Location"
-                    className={`w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.place && 'border-red-600 border-1'}`}
                 />
-                {errors.place && (
-                    <div className='mb-4'>
-                        {errors.place.type === 'required' && (
-                            <p className="text-red-500">Place can't be an empty string.</p>
-                        )}
-                        {errors.place.type === 'minLength' && (
-                            <p className="text-red-500">Place must be at least 4 characters long.</p>
-                        )}
-                        {errors.place.type === 'maxLength' && (
-                            <p className="text-red-500">Place must be less than 20 characters long.</p>
-                        )}
-                    </div>
-                )}
+                <InputField
+                    label="City / Town / Village"
+                    name="place"
+                    placeholder="Location"
+                    register={register}
+                    errors={errors}
+                    minLength={4}
+                    maxLength={20}
+                    required={true}
+                    type="text"
+                />
                 <label htmlFor="address" className="text-lg font-semibold block">Address</label>
                 <textarea
                     type="text"

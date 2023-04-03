@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { Spinner } from "../components/Spinner";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { v4 as uuidv4 } from 'uuid';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { handleGeolocation } from "../utils/handleGeolocation";
+import { storeImage } from "../services/storageService";
+import { SizeButton } from "../components/SizeButton";
+import { InputField } from "../components/InputField";
 
 export const EditLandmark = () => {
     const navigate = useNavigate();
@@ -31,14 +33,14 @@ export const EditLandmark = () => {
         }
     });
     const params = useParams();
-    
+
     useEffect(() => {
         if (landmark && landmark.userRef !== auth.currentUser.uid) {
             toast.error('You cannot edit this landmark');
             navigate('/');
         }
     }, [landmark, auth.currentUser.uid, navigate]);
-    
+
     useEffect(() => {
         setLoading(true);
         const fetchLandmark = async () => {
@@ -57,7 +59,7 @@ export const EditLandmark = () => {
         };
         fetchLandmark();
     }, [navigate, params.landmarkId]);
-    
+
     useEffect(() => {
         Object.keys(initialValues).forEach((key) => {
             setValue(key, initialValues[key]);
@@ -68,7 +70,6 @@ export const EditLandmark = () => {
         setValue('size', e.target.value);
         const newSize = watch('size');
         setSize(newSize);
-        console.log(newSize);
     };
 
     const onSubmit = async (data) => {
@@ -82,61 +83,16 @@ export const EditLandmark = () => {
         let geolocation = {};
         let location;
         if (geolocationEnabled) {
-            const response = await fetch(
-                `https://maps.googleapis.com/maps/api/geocode/json?address=${data.address}
-                &key=${process.env.REACT_APP_GEOCODE_API_KEY}`
-            );
-            const fetchedData = await response.json();
-            console.log(fetchedData);
-            geolocation.lat = fetchedData.results[0]?.geometry.location.lat ?? 0;
-            geolocation.lng = fetchedData.results[0]?.geometry.location.lng ?? 0;
-
-            location = fetchedData.status === 'ZERO_RESULTS' && undefined;
+            const result = await handleGeolocation(data);
+            geolocation = result.geolocation;
+            location = result.location;
             if (location === undefined) {
                 setLoading(false);
                 toast.error('Please enter a correct address.');
                 return;
-            }
+            };
         } else {
-            geolocation.lat = data.latitude;
-            geolocation.lng = data.longitude;
-        };
-
-        const storeImage = async (img) => {
-            return new Promise((resolve, reject) => {
-                const storage = getStorage();
-                const filename = `${auth.currentUser.uid}-${img.name}-${uuidv4()}`;
-                const storageRef = ref(storage, filename);
-                const uploadTask = uploadBytesResumable(storageRef, img);
-
-                uploadTask.on('state_changed',
-                    (snapshot) => {
-                        // Observe state change events such as progress, pause, and resume
-                        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                        console.log('Upload is ' + progress + '% done');
-                        switch (snapshot.state) {
-                            case 'paused':
-                                console.log('Upload is paused');
-                                break;
-                            case 'running':
-                                console.log('Upload is running');
-                                break;
-                        }
-                    },
-                    (error) => {
-                        // Handle unsuccessful uploads
-                        reject(error);
-                    },
-                    () => {
-                        // Handle successful uploads on complete
-                        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-                        getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                            resolve(downloadURL);
-                        });
-                    }
-                );
-            });
+            geolocation = { lat: data.latitude, lng: data.longitude };
         };
 
         const imgUrls = await Promise.all(
@@ -177,126 +133,41 @@ export const EditLandmark = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <p className="text-lg mt-6 font-semibold">Small / Large</p>
                 <div className="flex">
-                    <button
-                        type="button"
-                        id="size"
-                        value="small"
-                        onClick={onChangeSize}
-                        className={`mr-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded 
-                                    hover:shadow-lg focus:shadow-lg active:shadow-lg transition
-                                    duration-150 ease-in-out w-full ${size === "large"
-                                ?
-                                'bg-white text-black'
-                                :
-                                'bg-slate-600 text-white'
-                            }`}
-                    >
-                        Small
-                    </button>
-                    <button
-                        type="button"
-                        id="size"
-                        value="large"
-                        onClick={onChangeSize}
-                        className={`ml-3 px-7 py-3 font-medium text-sm uppercase shadow-md rounded 
-                                    hover:shadow-lg focus:shadow-lg active:shadow-lg transition
-                                    duration-150 ease-in-out w-full ${size === "small"
-                                ?
-                                'bg-white text-black'
-                                :
-                                'bg-slate-600 text-white'
-                            }`}
-                    >
-                        Large
-                    </button>
+                    <SizeButton onChangeSize={onChangeSize} size={size} />
                 </div>
-                <label htmlFor="name" className="text-lg mt-6 font-semibold block">Name</label>
-                <input
-                    type="text"
-                    id="name"
+                <InputField
+                    label="Name"
+                    name="name"
                     placeholder="Name"
-                    {...register('name', {
-                        required: true,
-                        minLength: 5,
-                        maxLength: 80,
-                    })}
-                    className={`w-full px-4 py-2 text-xl 
-                    text-gray-700 bg-white border border-gray-300 
-                    rounded transition duration-150 ease-in-out focus:text-gray-700
-                    focus:bg-white focus:border-slate-600 mb-4
-                    ${errors.name && 'border-red-600 border-1'}`}
-                />
-                {errors.name && (
-                    <div className='mb-4'>
-                        {errors.name.type === 'required' && (
-                            <p className="text-red-500">Name can't be an empty string.</p>
-                        )}
-                        {errors.name.type === 'minLength' && (
-                            <p className="text-red-500">Name must be at least 5 characters long.</p>
-                        )}
-                        {errors.name.type === 'maxLength' && (
-                            <p className="text-red-500">Password must be less than 80 characters long.</p>
-                        )}
-                    </div>
-                )}
-                <label htmlFor="type" className="text-lg font-semibold block">Type</label>
-                <input
+                    register={register}
+                    errors={errors}
+                    minLength={5}
+                    maxLength={80}
+                    required={true}
                     type="text"
-                    id="type"
+                />
+                <InputField
+                    label="Type"
+                    name="type"
                     placeholder="Type"
-                    {...register('type', {
-                        required: true,
-                        minLength: 5,
-                        maxLength: 30,
-                    })}
-                    className={`w-full px-4 py-2 text-xl 
-                    text-gray-700 bg-white border border-gray-300 
-                    rounded transition duration-150 ease-in-out focus:text-gray-700
-                    focus:bg-white focus:border-slate-600 mb-4
-                    ${errors.type && 'border-red-600 border-1'}`}
-                />
-                {errors.type && (
-                    <div className='mb-4'>
-                        {errors.type.type === 'required' && (
-                            <p className="text-red-500">Type can't be an empty string.</p>
-                        )}
-                        {errors.type.type === 'minLength' && (
-                            <p className="text-red-500">Type must be at least 5 characters long.</p>
-                        )}
-                        {errors.type.type === 'maxLength' && (
-                            <p className="text-red-500">Type must be less than 30 characters long.</p>
-                        )}
-                    </div>
-                )}
-                <label htmlFor="place" className="text-lg font-semibold block">City / Town / Village</label>
-                <input
+                    register={register}
+                    errors={errors}
+                    minLength={5}
+                    maxLength={30}
+                    required={true}
                     type="text"
-                    id="place"
-                    {...register('place', {
-                        required: true,
-                        minLength: 4,
-                        maxLength: 20,
-                    })}
-                    placeholder="Location"
-                    className={`w-full px-4 py-2 text-xl 
-                    text-gray-700 bg-white border border-gray-300 
-                    rounded transition duration-150 ease-in-out focus:text-gray-700
-                    focus:bg-white focus:border-slate-600 mb-4
-                    ${errors.place && 'border-red-600 border-1'}`}
                 />
-                {errors.place && (
-                    <div className='mb-4'>
-                        {errors.place.type === 'required' && (
-                            <p className="text-red-500">Place can't be an empty string.</p>
-                        )}
-                        {errors.place.type === 'minLength' && (
-                            <p className="text-red-500">Place must be at least 4 characters long.</p>
-                        )}
-                        {errors.place.type === 'maxLength' && (
-                            <p className="text-red-500">Place must be less than 20 characters long.</p>
-                        )}
-                    </div>
-                )}
+                <InputField
+                    label="City / Town / Village"
+                    name="place"
+                    placeholder="Location"
+                    register={register}
+                    errors={errors}
+                    minLength={4}
+                    maxLength={20}
+                    required={true}
+                    type="text"
+                />
                 <label htmlFor="address" className="text-lg font-semibold block">Address</label>
                 <textarea
                     type="text"
