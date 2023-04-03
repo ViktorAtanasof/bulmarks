@@ -12,7 +12,7 @@ import lock from '../assets/images/lock.jpg';
 
 export const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: "",
             email: "",
@@ -26,17 +26,12 @@ export const SignUp = () => {
         setShowPassword((prevState) => !prevState);
     };
 
-    const onChangeUsername = (e) => {
-        const trimmedUsername = e.target.value.replace(/\s/g, '');
-        setValue('username', trimmedUsername);
-    };
-
     const onSubmit = async (data) => {
         try {
             const auth = getAuth();
             const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
             updateProfile(auth.currentUser, {
-                displayName: data.username,
+                displayName: data.username.split(' ').join(''),
             })
             const user = userCredentials.user;
             const formDataCopy = data;
@@ -46,8 +41,7 @@ export const SignUp = () => {
             await setDoc(doc(db, "users", user.uid), formDataCopy);
             navigate("/");
         } catch (error) {
-            console.log(error);
-            toast.error("Something went wrong.")
+            toast.error("Something went wrong.");
         }
     }
 
@@ -77,7 +71,6 @@ export const SignUp = () => {
                                 minLength: 3,
                                 maxLength: 20,
                             })}
-                            onChange={onChangeUsername}
                         />
                         {errors.username && (
                             <div className='mb-4 px-1'>

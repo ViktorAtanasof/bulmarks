@@ -13,7 +13,7 @@ export const Profile = () => {
     const [changeDetail, setChangeDetail] = useState(false);
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm({
+    const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             username: auth.currentUser.displayName,
             email: auth.currentUser.email,
@@ -22,14 +22,9 @@ export const Profile = () => {
 
     const navigate = useNavigate();
 
-    const onChangeUsername = (e) => {
-        const trimmedUsername = e.target.value.replace(/\s/g, '');
-        setValue('username', trimmedUsername);
-    };
-
     const onSubmit = async (data) => {
         try {
-            const username = data.username;
+            const username = data.username.split(' ').join('');
             if (auth.currentUser.displayName !== username) {
                 await updateProfile(auth.currentUser, {
                     displayName: username,
@@ -97,7 +92,6 @@ export const Profile = () => {
                                 minLength: 3,
                                 maxLength: 20,
                             })}
-                            onChange={onChangeUsername}
                             disabled={!changeDetail}
                             className={`w-full px-4 py-2 text-xl mb-4
                                      text-gray-700 bg-gray-300 border border-gray-300
