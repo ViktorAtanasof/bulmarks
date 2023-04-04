@@ -90,7 +90,7 @@ export const SignUp = () => {
                                      text-gray-700 bg-white border-gray-300 
                                        rounded transition ease-in-out
                                        ${errors.email && 'border-red-600 border-1'}`}
-                            type="email"
+                            type="text"
                             id="email"
                             placeholder="Email address"
                             {...register('email', {

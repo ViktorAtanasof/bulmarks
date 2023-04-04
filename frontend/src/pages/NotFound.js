@@ -14,7 +14,7 @@ export const NotFound = () => {
                 className="inline-block px-6 py-3 mt-8 text-lg 
                 font-medium text-white bg-blue-500 rounded-md hover:bg-blue-600"
             >
-                Go back home
+                Go back to home
             </Link>
         </div>
     );
