@@ -1,6 +1,6 @@
 import { collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { Spinner } from "../components/Spinner";
@@ -11,6 +11,7 @@ export const Category = () => {
     const [loading, setLoading] = useState(true);
     const [lastFetchedLandmark, setLastFetchedLandmark] = useState(null);
     const params = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchLandmarks = async () => {
@@ -23,6 +24,10 @@ export const Category = () => {
                     limit(8),
                 );
                 const querySnap = await getDocs(q);
+                if(querySnap.size === 0) {
+                    navigate('/not-found');
+                    return;
+                }
                 const lastVisible = querySnap.docs[querySnap.docs.length - 1];
                 setLastFetchedLandmark(lastVisible);
                 const landmarks = [];
@@ -39,7 +44,7 @@ export const Category = () => {
             }
         };
         fetchLandmarks();
-    }, [params.categoryName]);
+    }, [params.categoryName, navigate]);
 
     const onFetchMoreLandmarks = async () => {
         try {
@@ -77,7 +82,7 @@ export const Category = () => {
             </h1>
             {loading ? (
                 <Spinner />
-            ) : landmarks && landmarks?.length > 0 ? (
+            ) : landmarks?.length > 0 && (
                 <>
                     <main>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
@@ -102,8 +107,6 @@ export const Category = () => {
                         </div>
                     )}
                 </>
-            ) : (
-                <p>There are no {params.categoryName === 'small' ? 'small' : 'large'} landmarks available.</p>
             )}
         </div>
     );

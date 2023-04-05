@@ -63,10 +63,10 @@ export const Home = () => {
                 ) : (
                     <>
                         <section className="max-w-6xl mx-auto pt-4 space-y-6">
-                            {smallLandmarks && smallLandmarks?.length > 0 && (
+                            {smallLandmarks?.length > 0 && (
                                 <LandmarkCategory landmarks={smallLandmarks} category={"small"} />
                             )}
-                            {largeLandmarks && largeLandmarks?.length > 0 && (
+                            {largeLandmarks?.length > 0 && (
                                 <LandmarkCategory landmarks={largeLandmarks} category={"large"} />
                             )}
                         </section>

@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "../components/Spinner";
 import { db } from "../firebase";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -19,6 +19,7 @@ import { LikeLandmark } from "../components/LikeLandmark";
 export const Landmark = () => {
     const params = useParams();
     const auth = getAuth();
+    const navigate = useNavigate();
     const [landmark, setLandmark] = useState(null);
     const [loading, setLoading] = useState(true);
     SwiperCore.use([Autoplay, Navigation, Pagination]);
@@ -30,10 +31,12 @@ export const Landmark = () => {
             if (docSnap.exists()) {
                 setLandmark(docSnap.data());
                 setLoading(false);
+            } else {
+                navigate('/not-found');
             }
         };
         fetchLandmark();
-    }, [params.landmarkId]);
+    }, [params.landmarkId, navigate]);
 
     if (loading) {
         return <Spinner />
@@ -93,7 +96,7 @@ export const Landmark = () => {
                         {landmark.description}
                     </p>
                     <div>
-                        {auth && <LikeLandmark id={params.landmarkId} likes={landmark.likes}/>}
+                        {auth && <LikeLandmark id={params.landmarkId} likes={landmark.likes} />}
                     </div>
                 </div>
                 <div className="w-full h-[200px] md:h-[400px] z-10 overflox-x-hidden mt-6 md:mt-0 md:ml-2">

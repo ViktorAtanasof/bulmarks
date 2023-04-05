@@ -71,7 +71,7 @@ export const Landmarks = () => {
             <h1 className="text-3xl text-center mt-6 mb-6 font-bold">All landmarks</h1>
             {loading ? (
                 <Spinner />
-            ) : landmarks && landmarks?.length > 0 ? (
+            ) : landmarks?.length > 0 ? (
                 <>
                     <main>
                         <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
