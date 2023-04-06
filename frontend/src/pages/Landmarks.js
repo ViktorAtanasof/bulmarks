@@ -5,7 +5,7 @@ import { LandmarkItem } from "../components/LandmarkItem";
 import { Spinner } from "../components/Spinner";
 import { db } from "../firebase";
 
-export const Landmarks = () => {
+const Landmarks = () => {
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
     const [lastFetchedLandmark, setLastFetchedLandmark] = useState(null);
@@ -102,3 +102,5 @@ export const Landmarks = () => {
         </div>
     );
 };
+
+export default Landmarks;

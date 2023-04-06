@@ -11,7 +11,7 @@ import { storeImage } from "../services/storageService";
 import { SizeButton } from "../components/SizeButton";
 import { InputField } from "../components/InputField";
 
-export const CreateLandmark = () => {
+const CreateLandmark = () => {
     const navigate = useNavigate();
     const auth = getAuth();
     const [geolocationEnabled, setGeolocationEnabled] = useState(true);
@@ -253,3 +253,5 @@ export const CreateLandmark = () => {
         </main>
     );
 };
+
+export default CreateLandmark;

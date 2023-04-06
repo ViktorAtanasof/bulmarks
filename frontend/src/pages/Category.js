@@ -6,7 +6,7 @@ import { LandmarkItem } from "../components/LandmarkItem";
 import { Spinner } from "../components/Spinner";
 import { db } from "../firebase";
 
-export const Category = () => {
+const Category = () => {
     const [landmarks, setLandmarks] = useState(null);
     const [loading, setLoading] = useState(true);
     const [lastFetchedLandmark, setLastFetchedLandmark] = useState(null);
@@ -111,3 +111,5 @@ export const Category = () => {
         </div>
     );
 };
+
+export default Category;

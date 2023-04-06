@@ -8,7 +8,7 @@ import { FcLandscape } from 'react-icons/fc';
 import { LandmarkItem } from '../components/LandmarkItem';
 import { useForm } from "react-hook-form";
 
-export const Profile = () => {
+const Profile = () => {
     const auth = getAuth();
     const [changeDetail, setChangeDetail] = useState(false);
     const [landmarks, setLandmarks] = useState(null);
@@ -173,3 +173,5 @@ export const Profile = () => {
         </>
     );
 };
+
+export default Profile;
