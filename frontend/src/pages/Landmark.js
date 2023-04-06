@@ -16,7 +16,7 @@ import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { getAuth } from "firebase/auth";
 import { LikeLandmark } from "../components/LikeLandmark";
 
-const Landmark = () => {
+export const Landmark = () => {
     const params = useParams();
     const auth = getAuth();
     const navigate = useNavigate();
@@ -121,5 +121,3 @@ const Landmark = () => {
         </main>
     );
 };
-
-export default Landmark;

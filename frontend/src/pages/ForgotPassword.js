@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 
 import lock from '../assets/images/lock.jpg';
 
-const ForgotPassword = () => {
+export const ForgotPassword = () => {
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
             email: "",
@@ -91,5 +91,3 @@ const ForgotPassword = () => {
         </section>
     );
 };
-
-export default ForgotPassword;

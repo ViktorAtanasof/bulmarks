@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 
 import lock from '../assets/images/lock.jpg';
 
-const SignUp = () => {
+export const SignUp = () => {
     const [showPassword, setShowPassword] = useState(false);
     const { register, handleSubmit, formState: { errors } } = useForm({
         defaultValues: {
@@ -183,5 +183,3 @@ const SignUp = () => {
         </section>
     );
 };
-
-export default SignUp;
