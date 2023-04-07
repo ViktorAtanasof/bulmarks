@@ -48,7 +48,9 @@ export const Home = () => {
                 <img
                     className="w-full h-[500px] object-cover brightness-75"
                     src={bulgaria}
-                    alt="landscape" />
+                    alt="landscape" 
+                    loading="lazy"
+                    />
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
                                 text-center text-white">
                     <p className="text-sm md:text-2xl tracking-widest">EXPLORE THE BEST</p>
