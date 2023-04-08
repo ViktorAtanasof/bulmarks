@@ -68,14 +68,14 @@ export const LikeLandmark = ({
                 ) : user && !isOwner && (
                     !liked
                         ? (
-                            <div className='flex items-center' onClick={handleLike}>
+                            <div className='flex items-center text-rose-500' onClick={handleLike}>
                                 <AiOutlineHeart className='cursor-pointer mr-1' />
                                 <p> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
                             </div>
                         )
                         : (
-                            <div className='flex items-center' onClick={handleLike}>
-                                <AiFillHeart className="text-red-700 cursor-pointer mr-1" />
+                            <div className='flex items-center text-red-800' onClick={handleLike}>
+                                <AiFillHeart className=" cursor-pointer mr-1" />
                                 <p> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
                             </div>
                         )
@@ -84,7 +84,7 @@ export const LikeLandmark = ({
             </div>
             <div>
                 {user && isOwner && (
-                    <p> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
+                    <p className='text-red-800'> {likesCount} {likesCount === 1 ? 'Like' : 'Likes'}</p>
                 )}
             </div>
         </>
