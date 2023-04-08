@@ -10,6 +10,7 @@ import { handleGeolocation } from "../utils/handleGeolocation";
 import { storeImage } from "../services/storageService";
 import { SizeButton } from "../components/SizeButton";
 import { InputField } from "../components/InputField";
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 export const CreateLandmark = () => {
     const navigate = useNavigate();
@@ -96,7 +97,7 @@ export const CreateLandmark = () => {
             <form onSubmit={handleSubmit(onSubmit)}>
                 <p className="text-lg mt-6 font-semibold">Small / Large</p>
                 <div className="flex">
-                        <SizeButton onChangeSize={onChangeSize} size={size}/>
+                    <SizeButton onChangeSize={onChangeSize} size={size} />
                 </div>
                 <InputField
                     label="Name"
@@ -217,8 +218,18 @@ export const CreateLandmark = () => {
                         )}
                     </div>
                 )}
-                <div className="mb-4">
+                <div className="mb-4 relative">
                     <label htmlFor="images" className="text-lg font-semibold block">Images</label>
+                    <div class="group absolute left-16 top-2">
+                        <AiOutlineInfoCircle
+                            className="cursor-pointer"
+                        />
+                        <span class="absolute top-[-10px] left-5 whitespace-nowrap scale-0 
+                                rounded bg-slate-700 p-2 text-xs text-white group-hover:scale-100"
+                        >
+                            Use horizontal images for the best visualization.
+                        </span>
+                    </div>
                     <p className="text-gray-600">The first image will be the cover (max 6 images)</p>
                     <input
                         type="file"
