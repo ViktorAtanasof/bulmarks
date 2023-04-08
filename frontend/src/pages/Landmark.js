@@ -55,7 +55,7 @@ export const Landmark = () => {
                 {landmark.imgUrls.map((url, index) => {
                     return <SwiperSlide key={index}>
                         <div
-                            className="relative w-full overflow-hidden h-[300px]"
+                            className="relative w-full overflow-hidden h-[400px]"
                             style={{
                                 background: `url(${landmark.imgUrls[index]}) center no-repeat`,
                                 backgroundSize: 'cover'
@@ -69,7 +69,7 @@ export const Landmark = () => {
                            lg:mx-auto p-4 rounded-lg shadow-lg bg-white 
                            lg:space-x-5"
             >
-                <div className="w-full h-[200px] lg-[400px]">
+                <div className="w-full h-[50%] lg:h-[400px]">
                     <p className="text-2xl font-bold mb-3 text-[#222643]">
                         {landmark.name}
                     </p>
@@ -112,7 +112,7 @@ export const Landmark = () => {
                         />
                         <Marker position={[landmark.geolocation.lat, landmark.geolocation.lng]}>
                             <Popup>
-                                A pretty CSS3 popup. <br /> Easily customizable.
+                                <p>View in <a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/place/${landmark.address}`}>Google Maps</a></p>
                             </Popup>
                         </Marker>
                     </MapContainer>
