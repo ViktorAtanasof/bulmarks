@@ -39,12 +39,24 @@ export const SignIn = () => {
         <section>
             <h1 className="text-3xl text-center mt-6 font-bold">Sign In</h1>
             <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
-                <div className="md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
+                <div className="relative md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
                     <img
                         src={lock}
                         alt="padlock"
                         className="w-full rounded-2xl"
                     />
+                    <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 
+                                    -translate-y-1/2 bg-[#f0f6ffdb] rounded p-5 md:p-10 lg:p-10'>
+                        <h3 className='font-bold my-2'>FOR DEMO</h3>
+                        <p
+                            className='whitespace-nowrap'
+                        >
+                            Email: <span className='font-medium text-blue-600'>admin@gmail.com</span>
+                        </p>
+                        <p>
+                            Password: <span className='font-medium text-blue-600'>123456</span>
+                        </p>
+                    </div>
                 </div>
                 <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
                     <form onSubmit={handleSubmit(onSubmit)}>
