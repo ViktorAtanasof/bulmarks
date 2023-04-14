@@ -37,7 +37,7 @@ export const Header = () => {
     };
 
     return (
-        <div className="bg-blue-50 border-b shadow-sm sticky top-0 z-40">
+        <div className="bg-blue-50 border-b shadow-sm sticky top-0 z-40 pt-2">
             <header className="md:flex justify-between items-center max-w-6xl md:px-3 md:mx-auto">
                 <div>
                     <Link className='inline-block w-auto' to={"/"}>
