@@ -12,6 +12,19 @@ export const Header = () => {
     const navigate = useNavigate();
     const auth = getAuth();
 
+    const controlNavbar = () => {
+        if (window.scrollY >= 100) {
+            setOpen(false);
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('scroll', controlNavbar);
+        return () => {
+            window.removeEventListener('scroll', controlNavbar);
+        };
+    }, [])
+
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
             if (user) {
@@ -24,12 +37,12 @@ export const Header = () => {
         });
     }, [auth])
 
-    
+
     const onLogout = () => {
         auth.signOut();
         navigate('/');
     };
-    
+
     const pathMatchRoute = (route) => {
         if (route === location.pathname) {
             return true;
@@ -51,7 +64,13 @@ export const Header = () => {
                             : <AiOutlineMenu />
                         }
                     </div>
-                    <ul className={`absolute w-full bg-blue-50 md:static md:flex md:space-x-10 ${open ? 'left-0 top-[13]' : 'top-[-490px]'}`}>
+                    <ul className={`absolute w-full bg-blue-50 md:static md:flex md:space-x-10
+                                    transition-all duration-500 ease-in-out
+                            ${open
+                            ? `left-0 top-[13] opacity-100`
+                            : `top-[-490px] opacity-0`
+                        }`}
+                    >
                         <li className={`
                             cursor-pointer
                             py-3
@@ -63,7 +82,7 @@ export const Header = () => {
                             border-b-transparent 
                             ${pathMatchRoute("/") && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link to="/">Home</Link>
+                            <Link className="inline-block w-full" to="/">Home</Link>
                         </li>
                         <li className={`
                             cursor-pointer
@@ -76,7 +95,7 @@ export const Header = () => {
                             border-b-transparent 
                             ${pathMatchRoute("/landmarks") && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link to="/landmarks">Landmarks</Link>
+                            <Link className="inline-block w-full" to="/landmarks">Landmarks</Link>
                         </li>
                         <li className={`
                             cursor-pointer
@@ -90,7 +109,7 @@ export const Header = () => {
                             ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile"))
                             && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link to="/profile">{pageState}</Link>
+                            <Link className="inline-block w-full" to="/profile">{pageState}</Link>
                         </li>
                         {auth.currentUser !== null && (
                             <li className='
@@ -103,7 +122,7 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent'
                             >
-                                <Link to="/" onClick={onLogout}>{showLogout}</Link>
+                                <Link className="inline-block w-full" to="/" onClick={onLogout}>{showLogout}</Link>
                             </li>
                         )}
                     </ul>
