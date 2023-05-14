@@ -68,7 +68,7 @@ export const Header = () => {
                                     transition-all duration-500 ease-in-out
                             ${open
                             ? `left-0 top-[13] opacity-100`
-                            : `top-[-490px] opacity-0 md:opacity-100`
+                            : `opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto`
                         }`}
                     >
                         <li className={`
