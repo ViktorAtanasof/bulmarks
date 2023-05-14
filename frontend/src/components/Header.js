@@ -73,8 +73,6 @@ export const Header = () => {
                     >
                         <li className={`
                             cursor-pointer
-                            py-3
-                            px-3 
                             text-sm 
                             font-semibold
                             text-slate-800 
@@ -82,12 +80,10 @@ export const Header = () => {
                             border-b-transparent 
                             ${pathMatchRoute("/") && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link className="inline-block w-full" to="/">Home</Link>
+                            <Link className="inline-block w-full py-3 px-3" to="/">Home</Link>
                         </li>
                         <li className={`
-                            cursor-pointer
-                            py-3
-                            px-3 
+                            cursor-pointer 
                             text-sm 
                             font-semibold
                           text-slate-800 
@@ -95,12 +91,10 @@ export const Header = () => {
                             border-b-transparent 
                             ${pathMatchRoute("/landmarks") && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link className="inline-block w-full" to="/landmarks">Landmarks</Link>
+                            <Link className="inline-block w-full py-3 px-3" to="/landmarks">Landmarks</Link>
                         </li>
                         <li className={`
                             cursor-pointer
-                            py-3
-                            px-3 
                             text-sm 
                             font-semibold
                           text-slate-800 
@@ -109,20 +103,18 @@ export const Header = () => {
                             ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile"))
                             && "!font-bold !border-b-green-600"}`}
                         >
-                            <Link className="inline-block w-full" to="/profile">{pageState}</Link>
+                            <Link className="inline-block w-full py-3 px-3" to="/profile">{pageState}</Link>
                         </li>
                         {auth.currentUser !== null && (
                             <li className='
                             cursor-pointer
-                            py-3
-                            px-3 
                             text-sm 
                             font-semibold
                           text-slate-800 
                             border-b-[3px] 
                             border-b-transparent'
                             >
-                                <Link className="inline-block w-full" to="/" onClick={onLogout}>{showLogout}</Link>
+                                <Link className="inline-block w-full py-3 px-3" to="/" onClick={onLogout}>{showLogout}</Link>
                             </li>
                         )}
                     </ul>
