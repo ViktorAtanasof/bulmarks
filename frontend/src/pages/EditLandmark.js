@@ -10,6 +10,7 @@ import { handleGeolocation } from "../utils/handleGeolocation";
 import { storeImage } from "../services/storageService";
 import { SizeButton } from "../components/SizeButton";
 import { InputField } from "../components/InputField";
+import { AiOutlineInfoCircle } from 'react-icons/ai';
 
 export const EditLandmark = () => {
     const navigate = useNavigate();
@@ -234,7 +235,7 @@ export const EditLandmark = () => {
                     {...register('description', {
                         required: true,
                         minLength: 3,
-                        maxLength: 700,
+                        maxLength: 600,
                     })}
                     placeholder="Description"
                     required
@@ -253,12 +254,22 @@ export const EditLandmark = () => {
                             <p className="text-red-500">Description must be at least 3 characters long.</p>
                         )}
                         {errors.description.type === 'maxLength' && (
-                            <p className="text-red-500">Description must be less than 700 characters long.</p>
+                            <p className="text-red-500">Description must be less than 600 characters long.</p>
                         )}
                     </div>
                 )}
-                <div className="mb-6">
+                <div className="mb-4 relative">
                     <label htmlFor="images" className="text-lg font-semibold block">Images</label>
+                    <div className="group absolute left-16 top-2">
+                        <AiOutlineInfoCircle
+                            className="cursor-pointer"
+                        />
+                        <span className="absolute top-[-10px] left-5 whitespace-nowrap scale-0 
+                                rounded bg-slate-700 p-2 text-xs text-white group-hover:scale-100"
+                        >
+                            Use horizontal images for the best visualization.
+                        </span>
+                    </div>
                     <p className="text-gray-600">The first image will be the cover (max 6 images)</p>
                     <input
                         type="file"

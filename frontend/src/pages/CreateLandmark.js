@@ -196,7 +196,7 @@ export const CreateLandmark = () => {
                     {...register('description', {
                         required: true,
                         minLength: 3,
-                        maxLength: 700,
+                        maxLength: 600,
                     })}
                     placeholder="Description"
                     className={`w-full px-4 py-2 text-xl 
@@ -214,17 +214,17 @@ export const CreateLandmark = () => {
                             <p className="text-red-500">Description must be at least 3 characters long.</p>
                         )}
                         {errors.description.type === 'maxLength' && (
-                            <p className="text-red-500">Description must be less than 700 characters long.</p>
+                            <p className="text-red-500">Description must be less than 600 characters long.</p>
                         )}
                     </div>
                 )}
                 <div className="mb-4 relative">
                     <label htmlFor="images" className="text-lg font-semibold block">Images</label>
-                    <div class="group absolute left-16 top-2">
+                    <div className="group absolute left-16 top-2">
                         <AiOutlineInfoCircle
                             className="cursor-pointer"
                         />
-                        <span class="absolute top-[-10px] left-5 whitespace-nowrap scale-0 
+                        <span className="absolute top-[-10px] left-5 whitespace-nowrap scale-0 
                                 rounded bg-slate-700 p-2 text-xs text-white group-hover:scale-100"
                         >
                             Use horizontal images for the best visualization.
