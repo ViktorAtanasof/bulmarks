@@ -1,5 +1,5 @@
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import logo from '../assets/logo/logo.webp';
@@ -12,6 +12,27 @@ export const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const auth = getAuth();
+    const avatarRef = useRef(null);
+
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (avatarRef.current && !avatarRef.current.contains(event.target) && event.target.tagName !== 'A') {
+                setOpenProfile(false);
+            }
+        }
+        // Check if the screen size is larger than the specified breakpoint
+        const mediaQuery = window.matchMedia('(min-width: 768px)');
+
+        if (mediaQuery.matches) {
+            document.addEventListener('mousedown', handleClickOutside);
+        }
+
+        return () => {
+            if (mediaQuery.matches) {
+                document.removeEventListener('mousedown', handleClickOutside);
+            }
+        };
+    }, []);
 
     useEffect(() => {
         const screenWidth = window.screen.width;
@@ -19,10 +40,11 @@ export const Header = () => {
             setOpenProfile(true);
         }
     }, []);
-    
+
     const controlNavbar = () => {
         if (window.scrollY >= 100) {
             setOpen(false);
+            setOpenProfile(false);
         }
     };
 
@@ -118,7 +140,9 @@ export const Header = () => {
                                     }`}
                                 alt="avatar"
                                 className="w-9 h-9 rounded mr-10 hidden md:inline"
-                                onClick={() => setOpenProfile(!openProfile)} />
+                                onClick={() => setOpenProfile(!openProfile)}
+                                ref={avatarRef}
+                            />
                         </li>
                         {openProfile && (
                             <ul className='md:absolute bg-blue-50 md:top-[50px] md:right-0 md:drop-shadow-xl 
