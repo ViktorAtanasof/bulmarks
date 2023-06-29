@@ -14,13 +14,12 @@ export const Header = () => {
     const auth = getAuth();
 
     useEffect(() => {
-        // Check if the device is mobile
-        const isMobileDevice = /Mobi/i.test(window.navigator.userAgent);
-        if (isMobileDevice) {
+        const screenWidth = window.screen.width;
+        if (screenWidth < 768) {
             setOpenProfile(true);
         }
     }, []);
-
+    
     const controlNavbar = () => {
         if (window.scrollY >= 100) {
             setOpen(false);
