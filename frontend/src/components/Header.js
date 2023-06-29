@@ -3,11 +3,13 @@ import { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import logo from '../assets/logo/logo.webp';
+import profilePicture from '../assets/images/profile.png';
 
 export const Header = () => {
     const [pageState, setPageState] = useState('Sign in');
     const [showLogout, setShowLogout] = useState(null);
     const [open, setOpen] = useState(false);
+    const [openProfile, setOpenProfile] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
     const auth = getAuth();
@@ -57,7 +59,7 @@ export const Header = () => {
                         <img src={logo} alt="logo" className="h-12 cursor-pointer px-3" />
                     </Link>
                 </div>
-                <nav>
+                <nav className='md:relative'>
                     <div onClick={() => setOpen(!open)} className='text-3xl absolute right-2 top-4 cursor-pointer md:hidden'>
                         {open
                             ? <AiOutlineClose />
@@ -65,7 +67,7 @@ export const Header = () => {
                         }
                     </div>
                     <ul className={`absolute w-full bg-blue-50 md:static md:flex md:space-x-10
-                                    transition-all duration-500 ease-in-out
+                                    transition-all duration-500 ease-in-out items-center
                             ${open
                             ? `left-0 top-[13] opacity-100`
                             : `opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto`
@@ -94,6 +96,29 @@ export const Header = () => {
                             <Link className="inline-block w-full py-3 px-3" to="/landmarks">Landmarks</Link>
                         </li>
                         <li className={`
+                            cursor-pointer 
+                            text-sm 
+                            font-semibold
+                          text-slate-800 
+                            border-b-[3px] 
+                            border-b-transparent 
+                           `}
+                        >
+                            <img 
+                            src={profilePicture} 
+                            alt="" 
+                            className='w-9 h-9 rounded mr-10'
+                            onClick={() => setOpenProfile(!openProfile)} />
+                        </li>
+                        {openProfile && (
+                            <ul className='md:absolute bg-blue-50 md:top-[50px] md:right-0 md:drop-shadow-xl 
+                            md:rounded md:border-2'
+                            /* className={
+                                ${open
+                                    ? `left-0 top-[13] opacity-100`
+                                    : `opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto`
+                                }} */>
+                                <li className={`
                             cursor-pointer
                             text-sm 
                             font-semibold
@@ -101,21 +126,23 @@ export const Header = () => {
                             border-b-[3px] 
                             border-b-transparent
                             ${(pathMatchRoute("/sign-in") || pathMatchRoute("/profile"))
-                            && "!font-bold !border-b-green-600"}`}
-                        >
-                            <Link className="inline-block w-full py-3 px-3" to="/profile">{pageState}</Link>
-                        </li>
-                        {auth.currentUser !== null && (
-                            <li className='
+                                    && "!font-bold !border-b-green-600"}`}
+                                >
+                                    <Link className="inline-block w-full py-3 px-3" to="/profile">{pageState}</Link>
+                                </li>
+                                {auth.currentUser !== null && (
+                                    <li className='
                             cursor-pointer
                             text-sm 
                             font-semibold
                           text-slate-800 
                             border-b-[3px] 
                             border-b-transparent'
-                            >
-                                <Link className="inline-block w-full py-3 px-3" to="/" onClick={onLogout}>{showLogout}</Link>
-                            </li>
+                                    >
+                                        <Link className="inline-block w-full py-3 px-3" to="/" onClick={onLogout}>{showLogout}</Link>
+                                    </li>
+                                )}
+                            </ul>
                         )}
                     </ul>
                 </nav>
