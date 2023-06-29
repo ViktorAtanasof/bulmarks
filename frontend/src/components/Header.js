@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useLocation, Link, useNavigate } from 'react-router-dom';
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import logo from '../assets/logo/logo.webp';
-import profilePicture from '../assets/images/profile.png';
 
 export const Header = () => {
     const [pageState, setPageState] = useState('Sign in');
@@ -13,6 +12,14 @@ export const Header = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const auth = getAuth();
+
+    useEffect(() => {
+        // Check if the device is mobile
+        const isMobileDevice = /Mobi/i.test(window.navigator.userAgent);
+        if (isMobileDevice) {
+            setOpenProfile(true);
+        }
+    }, []);
 
     const controlNavbar = () => {
         if (window.scrollY >= 100) {
@@ -104,20 +111,19 @@ export const Header = () => {
                             border-b-transparent 
                            `}
                         >
-                            <img 
-                            src={profilePicture} 
-                            alt="" 
-                            className='w-9 h-9 rounded mr-10'
-                            onClick={() => setOpenProfile(!openProfile)} />
+                            <img
+                                src={`https://api.dicebear.com/6.x/initials/svg?seed=
+                                ${auth.currentUser === null
+                                        ? 'G' // Guest
+                                        : auth.currentUser.displayName
+                                    }`}
+                                alt="avatar"
+                                className="w-9 h-9 rounded mr-10 hidden md:inline"
+                                onClick={() => setOpenProfile(!openProfile)} />
                         </li>
                         {openProfile && (
                             <ul className='md:absolute bg-blue-50 md:top-[50px] md:right-0 md:drop-shadow-xl 
-                            md:rounded md:border-2'
-                            /* className={
-                                ${open
-                                    ? `left-0 top-[13] opacity-100`
-                                    : `opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto`
-                                }} */>
+                            md:rounded md:border-2'>
                                 <li className={`
                             cursor-pointer
                             text-sm 
