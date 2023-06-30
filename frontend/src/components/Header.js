@@ -15,36 +15,38 @@ export const Header = () => {
     const avatarRef = useRef(null);
 
     useEffect(() => {
-        function handleClickOutside(event) {
-            if (avatarRef.current && !avatarRef.current.contains(event.target) && event.target.tagName !== 'A') {
+        const handleClickOutside = (event) => {
+            if (window.innerWidth > 768 
+                && avatarRef.current 
+                && !avatarRef.current.contains(event.target) 
+                && event.target.tagName !== 'A') {
                 setOpenProfile(false);
-            }
-        }
+            };
+        };
         // Check if the screen size is larger than the specified breakpoint
         const mediaQuery = window.matchMedia('(min-width: 768px)');
 
         if (mediaQuery.matches) {
             document.addEventListener('mousedown', handleClickOutside);
-        }
+        };
 
         return () => {
             if (mediaQuery.matches) {
                 document.removeEventListener('mousedown', handleClickOutside);
-            }
+            };
         };
     }, []);
 
     useEffect(() => {
-        const screenWidth = window.screen.width;
-        if (screenWidth < 768) {
-            setOpenProfile(true);
-        }
+            setOpenProfile(window.innerWidth < 768);
     }, []);
 
     const controlNavbar = () => {
         if (window.scrollY >= 100) {
             setOpen(false);
-            setOpenProfile(false);
+            if (window.innerWidth > 768) {
+                setOpenProfile(false);
+            }
         }
     };
 
