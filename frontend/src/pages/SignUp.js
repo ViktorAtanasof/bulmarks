@@ -37,6 +37,7 @@ export const SignUp = () => {
             const formDataCopy = data;
             delete formDataCopy.password;
             formDataCopy.timestamp = serverTimestamp();
+            formDataCopy.favourites = [];
 
             await setDoc(doc(db, "users", user.uid), formDataCopy);
             navigate("/");
