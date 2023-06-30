@@ -15,6 +15,7 @@ import { Home } from './pages/Home';
 import { Header } from './components/Header';
 import { PrivateRoute } from './components/PrivateRoute';
 import { PublicRoute } from './components/PublicRoute';
+import { Favourites } from './pages/Favourites';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/profile' element={<PrivateRoute />}>
             <Route path='/profile' element={<Profile />} />
+            <Route path='/profile/favourites' element={<Favourites />} />
           </Route>
           <Route path='/sign-in' element={<PublicRoute />}>
             <Route path='/sign-in' element={<SignIn />} />
