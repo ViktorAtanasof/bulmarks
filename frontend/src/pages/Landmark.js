@@ -15,6 +15,7 @@ import { FaMapMarkerAlt } from 'react-icons/fa';
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { getAuth } from "firebase/auth";
 import { LikeLandmark } from "../components/LikeLandmark";
+import { FavouriteLandmark } from "../components/FavouriteLandmark";
 
 export const Landmark = () => {
     const params = useParams();
@@ -97,6 +98,7 @@ export const Landmark = () => {
                     </p>
                     <div>
                         {auth && <LikeLandmark id={params.landmarkId} likes={landmark.likes} />}
+                        {auth && <FavouriteLandmark id={params.landmarkId} />}
                     </div>
                 </div>
                 <div className="w-full h-[200px] md:h-[400px] z-10 overflox-x-hidden mt-6 md:mt-0 md:ml-2">
