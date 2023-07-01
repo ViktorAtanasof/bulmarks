@@ -186,8 +186,9 @@ export const Header = () => {
                     {pageState}
                   </Link>
                 </li>
-                <li
-                  className={`
+                {auth.currentUser !== null && (
+                  <li
+                    className={`
                             cursor-pointer 
                             text-sm 
                             font-semibold
@@ -198,14 +199,15 @@ export const Header = () => {
                               pathMatchRoute("/profile/favourites") &&
                               "!font-bold !border-b-green-600"
                             }`}
-                >
-                  <Link
-                    className="inline-block w-full py-3 px-3"
-                    to="/profile/favourites"
                   >
-                    Favourites
-                  </Link>
-                </li>
+                    <Link
+                      className="inline-block w-full py-3 px-3"
+                      to="/profile/favourites"
+                    >
+                      Favourites
+                    </Link>
+                  </li>
+                )}
                 {auth.currentUser !== null && (
                   <li
                     className="
