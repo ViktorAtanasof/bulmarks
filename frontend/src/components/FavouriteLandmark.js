@@ -31,12 +31,9 @@ export const FavouriteLandmark = ({ id }) => {
         setLoading(false);
       }
     };
-    fetchLandmark();
-  }, [id]);
 
-  useEffect(() => {
     const fetchUser = async () => {
-      if (userRef) {
+      if (user) {
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -44,8 +41,10 @@ export const FavouriteLandmark = ({ id }) => {
         }
       }
     };
+
+    fetchLandmark();
     fetchUser();
-  }, [userRef]);
+  }, [id, user, userRef]);
 
   useEffect(() => {
     if (user && favourites.includes(id)) {
@@ -57,47 +56,34 @@ export const FavouriteLandmark = ({ id }) => {
 
   const handleFavourite = async () => {
     try {
-      if (favourited) {
-        await updateDoc(userRef, {
-          favourites: arrayRemove(id),
-        });
-        setFavourited(false);
-      } else {
-        await updateDoc(userRef, {
-          favourites: arrayUnion(id),
-        });
-        setFavourited(true);
-      }
+      const updateValue = favourited ? arrayRemove(id) : arrayUnion(id);
+      await updateDoc(userRef, { favourites: updateValue });
+      setFavourited(!favourited);
     } catch (error) {
       toast.error("Something went wrong.");
     }
   };
 
+  if (loading) {
+    return <Spinner />;
+  }
   return (
     <>
       <div>
-        {loading ? (
-          <Spinner />
-        ) : (
-          user &&
-          !isOwner &&
-          (!favourited ? (
-            <div
-              className="flex items-center text-yellow-500 cursor-pointer"
-              onClick={handleFavourite}
-            >
-              <BsBookmark className="mr-1" />
-              <p>{favourited ? "Favourited" : "Favourite"}</p>
-            </div>
-          ) : (
-            <div
-              className="flex items-center text-yellow-800 cursor-pointer"
-              onClick={handleFavourite}
-            >
+        {user && !isOwner && (
+          <div
+            className={`flex items-center ${
+              favourited ? "text-yellow-800" : "text-yellow-500"
+            } cursor-pointer`}
+            onClick={handleFavourite}
+          >
+            {favourited ? (
               <BsBookmarkFill className="mr-1" />
-              <p>{favourited ? "Favourited" : "Favourite"}</p>
-            </div>
-          ))
+            ) : (
+              <BsBookmark className="mr-1" />
+            )}
+            <p>{favourited ? "Favourited" : "Favourite"}</p>
+          </div>
         )}
       </div>
     </>
