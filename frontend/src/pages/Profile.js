@@ -24,7 +24,7 @@ export const Profile = () => {
 
     const onSubmit = async (data) => {
         try {
-            const username = data.username.split(' ').join('');
+            const username = data.username.replace(/\s/g, '');
             if (auth.currentUser.displayName !== username) {
                 await updateProfile(auth.currentUser, {
                     displayName: username,

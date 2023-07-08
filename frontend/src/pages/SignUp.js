@@ -31,7 +31,7 @@ export const SignUp = () => {
             const auth = getAuth();
             const userCredentials = await createUserWithEmailAndPassword(auth, data.email, data.password);
             updateProfile(auth.currentUser, {
-                displayName: data.username.split(' ').join(''),
+                displayName: data.username.replace(/\s/g, ''),
             })
             const user = userCredentials.user;
             const formDataCopy = data;
