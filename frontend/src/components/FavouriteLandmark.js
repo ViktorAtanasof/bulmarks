@@ -69,23 +69,20 @@ export const FavouriteLandmark = ({ id }) => {
   }
   return (
     <>
-      <div>
-        {user && !isOwner && (
-          <div
-            className={`flex items-center ${
-              favourited ? "text-yellow-800" : "text-yellow-500"
+      {user && !isOwner && (
+        <div
+          className={`flex items-center ${favourited ? "text-yellow-800" : "text-yellow-500"
             } cursor-pointer`}
-            onClick={handleFavourite}
-          >
-            {favourited ? (
-              <BsBookmarkFill className="mr-1" />
-            ) : (
-              <BsBookmark className="mr-1" />
-            )}
-            <p>{favourited ? "Favourited" : "Favourite"}</p>
-          </div>
-        )}
-      </div>
+          onClick={handleFavourite}
+        >
+          {favourited ? (
+            <BsBookmarkFill className="mr-1" />
+          ) : (
+            <BsBookmark className="mr-1" />
+          )}
+          <p>{favourited ? "Favourited" : "Favourite"}</p>
+        </div>
+      )}
     </>
   );
 };
