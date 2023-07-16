@@ -59,6 +59,7 @@
   /sign-in
   /forgot-password
   /profile
+  /profile/favourites
   
   # Others (Home, Not Found)
   /
