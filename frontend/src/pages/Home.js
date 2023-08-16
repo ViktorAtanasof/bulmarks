@@ -1,7 +1,7 @@
 import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import bulgaria from '../assets/images/bulgaria.webp';
+import bulgaria from '../assets/images/bulgaria.jpg';
 import { Spinner } from "../components/Spinner";
 import { LandmarkCategory } from "../components/LandmarkCategory";
 
@@ -48,8 +48,7 @@ export const Home = () => {
                 <img
                     className="w-full h-[500px] object-cover brightness-75"
                     src={bulgaria}
-                    alt="landscape" 
-                    loading="lazy"
+                    alt="landscape"
                     />
                 <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
                                 text-center text-white">
