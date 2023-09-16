@@ -61,13 +61,20 @@ export const CreateLandmark = () => {
             geolocation = { lat: data.latitude, lng: data.longitude };
         };
 
-        const imgUrls = await Promise.all(
-            [...data.images].map((img) => storeImage(img))
-        ).catch((error) => {
+        let imgUrls;
+        try {
+            imgUrls = await Promise.all(
+                [...data.images].map((img) => storeImage(img))
+            );
+        } catch (error) {
             setLoading(false);
-            toast.error('Images not uploaded.');
+            if (error.message === 'Image/s must be less than 5 MB.') {
+                toast.error('Image/s must be less than 5 MB.');
+            } else {
+                toast.error('Images not uploaded.');
+            }
             return;
-        });
+        };
 
         const formDataCopy = {
             ...data,
