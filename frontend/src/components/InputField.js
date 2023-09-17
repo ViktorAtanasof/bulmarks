@@ -7,7 +7,6 @@ export const InputField = ({
     minLength,
     maxLength,
     required,
-    type,
 }) => {
     return (
         <>
@@ -15,7 +14,7 @@ export const InputField = ({
                 {label}
             </label>
             <input
-                type={type}
+                type="text"
                 id={name}
                 placeholder={placeholder}
                 {...register(name, {

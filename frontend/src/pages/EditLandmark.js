@@ -145,7 +145,6 @@ export const EditLandmark = () => {
                     minLength={5}
                     maxLength={80}
                     required={true}
-                    type="text"
                 />
                 <InputField
                     label="Type"
@@ -156,7 +155,6 @@ export const EditLandmark = () => {
                     minLength={5}
                     maxLength={30}
                     required={true}
-                    type="text"
                 />
                 <InputField
                     label="City / Town / Village"
@@ -167,7 +165,6 @@ export const EditLandmark = () => {
                     minLength={4}
                     maxLength={20}
                     required={true}
-                    type="text"
                 />
                 <label htmlFor="address" className="text-lg font-semibold block">Address</label>
                 <textarea
