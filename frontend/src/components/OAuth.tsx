@@ -14,7 +14,7 @@ export const OAuth = () => {
             const provider = new GoogleAuthProvider();
             const result = await signInWithPopup(auth, provider);
             const user = result.user;
-            const username = user.displayName.replace(/\s/g, '');
+            const username = user?.displayName?.replace(/\s/g, '');
             
             const docRef = doc(db, 'users', user.uid);
             const docSnap = await getDoc(docRef);
