@@ -1,13 +1,21 @@
 import { Link } from "react-router-dom";
 import { MdLocationOn, MdEdit } from 'react-icons/md';
 import { FaTrash } from 'react-icons/fa';
+import { Landmark } from '../types/landmarkTypes';
+
+type LandmarkItemProps = {
+    landmark: Landmark;
+    id: string;
+    onDelete?: (id: string) => void;
+    onEdit?: (id: string) => void;
+};
 
 export const LandmarkItem = ({
     landmark,
     id,
     onDelete,
     onEdit,
-}) => {
+}: LandmarkItemProps) => {
     return (
         <li className="relative bg-white flex flex-col justify-between items-center 
                        shadow-md hover:shadow-xl rounded-md overflow-hidden
