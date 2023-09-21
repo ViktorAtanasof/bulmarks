@@ -1,3 +1,5 @@
+import { InputFieldProps } from "../types/formTypes";
+
 export const InputField = ({
     label,
     name,
@@ -7,7 +9,7 @@ export const InputField = ({
     minLength,
     maxLength,
     required,
-}) => {
+}: InputFieldProps) => {
     return (
         <>
             <label htmlFor={name} className="text-lg font-semibold block">
@@ -30,15 +32,15 @@ export const InputField = ({
             />
             {errors[name] && (
                 <div className="mb-4">
-                    {errors[name].type === 'required' && (
+                    {errors[name]?.type === 'required' && (
                         <p className="text-red-500">{placeholder} can't be an empty string.</p>
                     )}
-                    {errors[name].type === 'minLength' && (
+                    {errors[name]?.type === 'minLength' && (
                         <p className="text-red-500">
                             {placeholder} must be at least {minLength} characters long.
                         </p>
                     )}
-                    {errors[name].type === 'maxLength' && (
+                    {errors[name]?.type === 'maxLength' && (
                         <p className="text-red-500">
                             {placeholder} must be less than {maxLength} characters long.
                         </p>
