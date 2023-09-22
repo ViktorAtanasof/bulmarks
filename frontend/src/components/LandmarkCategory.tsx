@@ -1,14 +1,6 @@
 import { Link } from "react-router-dom";
 import { LandmarkItem } from "./LandmarkItem";
-import { Landmark } from "../types/landmarkTypes";
-
-type LandmarkCategoryProps = {
-  landmarks: Array<{
-    id: string;
-    data: Landmark;
-  }>;
-  category: "small" | "large";
-};
+import { LandmarkCategoryProps } from "../types/landmarkTypes";
 
 export const LandmarkCategory = ({
   landmarks,
