@@ -15,14 +15,19 @@ export type Landmark = {
     userRef: string;
 };
 
-/* export type InputFieldProps = {
-    label: string;
-    name: string;
-    placeholder: string;
-    register:
-    errors:
-    minLength: number;
-    maxLength: number
-    required: boolean;
-    type,
-} */
+export type LandmarkCategoryProps = {
+    landmarks: Array<{
+        id: string;
+        data: Landmark;
+    }>;
+    category: "small" | "large";
+};
+
+export type LikeLandmarkProps = {
+    id: string;
+    likes: string[];
+};
+
+export type FavouriteLandmarkProps = {
+    id: string;
+};
