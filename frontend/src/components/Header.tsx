@@ -6,7 +6,7 @@ import logo from "../assets/logo/logo.webp";
 
 export const Header = () => {
   const [pageState, setPageState] = useState("Sign in");
-  const [showLogout, setShowLogout] = useState(null);
+  const [showLogout, setShowLogout] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const location = useLocation();
@@ -15,11 +15,12 @@ export const Header = () => {
   const avatarRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: MouseEvent) => {
       if (
         window.innerWidth > 768 &&
         avatarRef.current &&
-        !avatarRef.current.contains(event.target) &&
+        (avatarRef.current as HTMLElement).contains(event.target as Node) === false &&
+        event.target instanceof HTMLElement &&
         event.target.tagName !== "A"
       ) {
         setOpenProfile(false);
@@ -76,7 +77,7 @@ export const Header = () => {
     navigate("/");
   };
 
-  const pathMatchRoute = (route) => {
+  const pathMatchRoute = (route: string) => {
     if (route === location.pathname) {
       return true;
     }
