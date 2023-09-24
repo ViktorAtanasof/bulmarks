@@ -11,9 +11,10 @@ import { BsBookmarkFill, BsBookmark } from "react-icons/bs";
 import { toast } from "react-toastify";
 import { db } from "../firebase";
 import { Spinner } from "./Spinner";
+import { FavouriteLandmarkProps } from "../types/landmarkTypes";
 
-export const FavouriteLandmark = ({ id }) => {
-  const [favourites, setFavourites] = useState([]);
+export const FavouriteLandmark = ({ id }: FavouriteLandmarkProps) => {
+  const [favourites, setFavourites] = useState<string[]>([]);
   const [favourited, setFavourited] = useState(false);
   const [loading, setLoading] = useState(true);
   const [ownerId, setOwnerId] = useState(null);
@@ -33,7 +34,7 @@ export const FavouriteLandmark = ({ id }) => {
     };
 
     const fetchUser = async () => {
-      if (user) {
+      if (user && userRef) {
         const userDoc = await getDoc(userRef);
         if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -56,9 +57,11 @@ export const FavouriteLandmark = ({ id }) => {
 
   const handleFavourite = async () => {
     try {
-      const updateValue = favourited ? arrayRemove(id) : arrayUnion(id);
-      await updateDoc(userRef, { favourites: updateValue });
-      setFavourited(!favourited);
+      if (userRef) {
+        const updateValue = favourited ? arrayRemove(id) : arrayUnion(id);
+        await updateDoc(userRef, { favourites: updateValue });
+        setFavourited(!favourited);
+      }
     } catch (error) {
       toast.error("Something went wrong.");
     }
@@ -71,8 +74,9 @@ export const FavouriteLandmark = ({ id }) => {
     <>
       {user && !isOwner && (
         <div
-          className={`flex items-center ${favourited ? "text-yellow-800" : "text-yellow-500"
-            } cursor-pointer`}
+          className={`flex items-center ${
+            favourited ? "text-yellow-800" : "text-yellow-500"
+          } cursor-pointer`}
           onClick={handleFavourite}
         >
           {favourited ? (
