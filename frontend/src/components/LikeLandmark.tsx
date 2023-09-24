@@ -11,8 +11,9 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { toast } from "react-toastify";
 import { db } from "../firebase";
 import { Spinner } from "./Spinner";
+import { LikeLandmarkProps } from "../types/landmarkTypes";
 
-export const LikeLandmark = ({ id, likes }) => {
+export const LikeLandmark = ({ id, likes }: LikeLandmarkProps) => {
   const [liked, setLiked] = useState(false);
   const [loading, setLoading] = useState(true);
   const [ownerId, setOwnerId] = useState(null);
@@ -44,7 +45,7 @@ export const LikeLandmark = ({ id, likes }) => {
   const handleLike = async () => {
     try {
       const likesRef = doc(db, "landmarks", id);
-      const updateValue = liked ? arrayRemove(user.uid) : arrayUnion(user.uid);
+      const updateValue = liked ? arrayRemove(user?.uid) : arrayUnion(user?.uid);
       await updateDoc(likesRef, { likes: updateValue });
       setLiked(!liked);
       const newLikesCount = liked ? likesCount - 1 : likesCount + 1;
