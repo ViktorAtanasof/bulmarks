@@ -1,25 +1,30 @@
+import { FieldValue } from "firebase/firestore";
+
 export type Landmark = {
     id: string;
-    imgUrls: string[];
-    name: string;
-    place: string;
-    type: string;
     address: string;
     description: string;
-    likes?: string[];
     geolocation: {
         lat: number;
         lng: number;
     };
+    imgUrls: string[];
+    likes: string[];
+    name: string;
+    place: string;
     size: "small" | "large";
+    timestamp: FieldValue;
+    type: string;
     userRef: string;
 };
 
+export type LandmarkData = {
+    id: string;
+    data: Landmark;
+};
+
 export type LandmarkCategoryProps = {
-    landmarks: Array<{
-        id: string;
-        data: Landmark;
-    }>;
+    landmarks: Array<LandmarkData>;
     category: "small" | "large";
 };
 
