@@ -7,3 +7,8 @@ export type AuthFormData = {
     timestamp: FieldValue;
     favourites: string[];
 };
+
+export type ProfileFormData = {
+    username: string | null | undefined;
+    email: string | null | undefined;
+}
