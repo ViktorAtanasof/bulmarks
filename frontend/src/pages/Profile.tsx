@@ -1,4 +1,4 @@
-import { getAuth, updateProfile } from 'firebase/auth';
+import { User, getAuth, updateProfile } from 'firebase/auth';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -7,30 +7,32 @@ import { db } from '../firebase';
 import { FcLandscape } from 'react-icons/fc';
 import { LandmarkItem } from '../components/LandmarkItem';
 import { useForm } from "react-hook-form";
+import { LandmarkData } from '../types/landmarkTypes';
+import { ProfileFormData } from '../types/authTypes';
 
 export const Profile = () => {
     const auth = getAuth();
     const [changeDetail, setChangeDetail] = useState(false);
-    const [landmarks, setLandmarks] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const { register, handleSubmit, formState: { errors } } = useForm({
+    const [landmarks, setLandmarks] = useState<LandmarkData[]>([]);
+    const [loading, setLoading] = useState(true);
+    const { register, handleSubmit, formState: { errors } } = useForm<ProfileFormData>({
         defaultValues: {
-            username: auth.currentUser.displayName,
-            email: auth.currentUser.email,
+            username: auth.currentUser?.displayName,
+            email: auth.currentUser?.email,
         }
     })
 
     const navigate = useNavigate();
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: ProfileFormData) => {
         try {
-            const username = data.username.replace(/\s/g, '');
-            if (auth.currentUser.displayName !== username) {
-                await updateProfile(auth.currentUser, {
+            const username = data.username?.replace(/\s/g, '');
+            if (auth.currentUser?.displayName !== username) {
+                await updateProfile(auth.currentUser as User, {
                     displayName: username,
                 });
 
-                const docRef = doc(db, 'users', auth.currentUser.uid);
+                const docRef = doc(db, 'users', auth.currentUser?.uid || '');
                 await updateDoc(docRef, {
                     username,
                 });
@@ -46,24 +48,25 @@ export const Profile = () => {
             const landmarkRef = collection(db, 'landmarks');
             const q = query(
                 landmarkRef,
-                where('userRef', '==', auth.currentUser.uid),
+                where('userRef', '==', auth.currentUser?.uid),
                 orderBy('timestamp', 'desc')
             );
             const querySnap = await getDocs(q);
-            let landmarks = [];
+            const landmarks: LandmarkData[] = [];
             querySnap.forEach((doc) => {
                 return landmarks.push({
                     id: doc.id,
-                    data: doc.data(),
+                    data: doc.data() as LandmarkData['data'],
                 });
             });
+            
             setLandmarks(landmarks);
             setLoading(false);
         };
         fetchUserLandmarks();
-    }, [auth.currentUser.uid]);
+    }, [auth.currentUser?.uid]);
 
-    const onDelete = async (landmarkId) => {
+    const onDelete = async (landmarkId: string) => {
         if (window.confirm('Are you sure you want to delete?')) {
             await deleteDoc(doc(db, 'landmarks', landmarkId));
             const updatedLandmarks = landmarks.filter((landmark) => {
@@ -74,7 +77,7 @@ export const Profile = () => {
         };
     };
 
-    const onEdit = (landmarkId) => {
+    const onEdit = (landmarkId: string) => {
         navigate(`/edit-landmark/${landmarkId}`);
     };
 
@@ -166,7 +169,7 @@ export const Profile = () => {
                         </ul>
                     </>
                 )}
-                {landmarks?.length === 0 && (
+                {!loading && landmarks?.length === 0 && (
                     <p className='text-[22px] text-center  italic mt-10'>You have no marked landmarks yet.</p>
                 )}
             </div>
