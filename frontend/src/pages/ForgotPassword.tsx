@@ -12,7 +12,7 @@ export const ForgotPassword = () => {
         }
     });
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data: {email: string}) => {
         try {
             const auth = getAuth();
             await sendPasswordResetEmail(auth, data.email);
