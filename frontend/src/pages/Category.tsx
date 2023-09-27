@@ -1,15 +1,17 @@
-import { collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
+import { DocumentData, collection, getDocs, limit, orderBy, query, startAfter, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { Spinner } from "../components/Spinner";
 import { db } from "../firebase";
+import { LandmarkData } from "../types/landmarkTypes";
 
 export const Category = () => {
-    const [landmarks, setLandmarks] = useState(null);
+    const [landmarks, setLandmarks] = useState<LandmarkData[]>([]);
     const [loading, setLoading] = useState(true);
-    const [lastFetchedLandmark, setLastFetchedLandmark] = useState(null);
+    const [lastFetchedLandmark, setLastFetchedLandmark] = useState<DocumentData | null>(null);
+    const [hasMoreLandmarks, setHasMoreLandmarks] = useState(false);
     const params = useParams();
     const navigate = useNavigate();
 
@@ -28,13 +30,14 @@ export const Category = () => {
                     navigate('/not-found');
                     return;
                 }
+                setHasMoreLandmarks(querySnap.size >= 8);
                 const lastVisible = querySnap.docs[querySnap.docs.length - 1];
                 setLastFetchedLandmark(lastVisible);
-                const landmarks = [];
+                const landmarks: LandmarkData[] = [];
                 querySnap.forEach((doc) => {
                     return landmarks.push({
                         id: doc.id,
-                        data: doc.data(),
+                        data: doc.data() as LandmarkData['data'],
                     });
                 });
                 setLandmarks(landmarks);
@@ -57,13 +60,14 @@ export const Category = () => {
                 limit(4),
             );
             const querySnap = await getDocs(q);
+            setHasMoreLandmarks(querySnap.size >= 4);
             const lastVisible = querySnap.docs[querySnap.docs.length - 1];
             setLastFetchedLandmark(lastVisible);
-            const landmarks = [];
+            const landmarks: LandmarkData[] = [];
             querySnap.forEach((doc) => {
                 return landmarks.push({
                     id: doc.id,
-                    data: doc.data(),
+                    data: doc.data() as LandmarkData['data'],
                 });
             });
             setLandmarks((prevState) => {
@@ -95,7 +99,7 @@ export const Category = () => {
                             })}
                         </ul>
                     </main>
-                    {lastFetchedLandmark && landmarks?.length > 8 && (
+                    {hasMoreLandmarks && (
                         <div className="flex justify-center items-center">
                             <button
                                 onClick={onFetchMoreLandmarks}
