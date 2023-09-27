@@ -4,14 +4,15 @@ import { db } from "../firebase";
 import bulgaria from '../assets/images/bulgaria.jpg';
 import { Spinner } from "../components/Spinner";
 import { LandmarkCategory } from "../components/LandmarkCategory";
+import { LandmarkData } from "../types/landmarkTypes";
 
 export const Home = () => {
     const [loading, setLoading] = useState(true);
-    const [smallLandmarks, setSmallLandmarks] = useState(null);
-    const [largeLandmarks, setLargeLandmarks] = useState(null);
+    const [smallLandmarks, setSmallLandmarks] = useState<LandmarkData[]>([]);
+    const [largeLandmarks, setLargeLandmarks] = useState<LandmarkData[]>([]);
 
     useEffect(() => {
-        const fetchLandmarks = async (size) => {
+        const fetchLandmarks = async (size: 'large' | 'small') => {
             try {
                 const landmarksRef = collection(db, 'landmarks');
                 const q = query(
@@ -21,11 +22,11 @@ export const Home = () => {
                     limit(4),
                 );
                 const querySnap = await getDocs(q);
-                const landmarks = [];
+                const landmarks: LandmarkData[] = [];
                 querySnap.forEach((doc) => {
                     return landmarks.push({
                         id: doc.id,
-                        data: doc.data(),
+                        data: doc.data() as LandmarkData['data'],
                     });
                 });
                 if (size === 'small') {
