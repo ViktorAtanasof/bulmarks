@@ -4,11 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 const auth = getAuth();
 
-export const storeImage = async (img) => {
+export const storeImage = async (img: File) => {
     return new Promise((resolve, reject) => {
         try {
             const storage = getStorage();
-            const filename = `${auth.currentUser.uid}-${img.name}-${uuidv4()}`;
+            const filename = `${auth.currentUser?.uid}-${img.name}-${uuidv4()}`;
             const storageRef = ref(storage, filename);
 
             // Check the image size before uploading
