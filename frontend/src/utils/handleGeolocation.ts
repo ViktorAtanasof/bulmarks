@@ -1,4 +1,6 @@
-export const handleGeolocation = async (data) => {
+import { LandmarkFormData } from "../types/formTypes";
+
+export const handleGeolocation = async (data: LandmarkFormData) => {
     const response = await fetch(
         `https://maps.googleapis.com/maps/api/geocode/json?address=${data.address}
         &key=${process.env.REACT_APP_GEOCODE_API_KEY}`
