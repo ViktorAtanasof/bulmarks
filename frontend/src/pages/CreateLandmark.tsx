@@ -52,7 +52,7 @@ export const CreateLandmark = () => {
       return;
     }
 
-    let geolocation;
+    let geolocation = {};
     let location;
     if (geolocationEnabled) {
       const result = await handleGeolocation(data);
