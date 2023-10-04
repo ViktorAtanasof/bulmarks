@@ -11,4 +11,11 @@ export type AuthFormData = {
 export type ProfileFormData = {
     username: string | null | undefined;
     email: string | null | undefined;
+};
+
+export type UserData = {
+    email: string;
+    favourites: string[];
+    timestamp: FieldValue;
+    username: string;
 }
