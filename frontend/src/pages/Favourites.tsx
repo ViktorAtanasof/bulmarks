@@ -6,28 +6,32 @@ import {
   getDocs,
   getDoc,
   doc,
+  CollectionReference,
+  DocumentData,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { getAuth } from "firebase/auth";
 import { LandmarkItem } from "../components/LandmarkItem";
+import { LandmarkData } from "../types/landmarkTypes";
+import { UserData } from "../types/authTypes";
 
 export const Favourites = () => {
   const auth = getAuth();
-  const [favourites, setFavourites] = useState([]);
+  const [favourites, setFavourites] = useState<LandmarkData[]>([]);
   const [loading, setLoading] = useState(false);
   const userRef = collection(db, "users");
   const landmarkRef = collection(db, "landmarks");
 
   // Function to fetch user's favorite landmarks
-  const fetchUserFavorites = async (userData, landmarkRef) => {
-    const landmarks = [];
+  const fetchUserFavorites = async (userData: UserData, landmarkRef: CollectionReference<DocumentData>) => {
+    const landmarks: LandmarkData[] = [];
     for (const landmarkId of userData.favourites) {
       const docRef = doc(landmarkRef, landmarkId);
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         landmarks.push({
           id: docSnap.id,
-          data: docSnap.data(),
+          data: docSnap.data() as LandmarkData['data'],
         });
       }
     }
@@ -37,10 +41,10 @@ export const Favourites = () => {
   useEffect(() => {
     const fetchFavourites = async () => {
       try {
-        const q = query(userRef, where("email", "==", auth.currentUser.email));
+        const q = query(userRef, where("email", "==", auth.currentUser?.email));
         const querySnap = await getDocs(q);
         if (!querySnap.empty) {
-          const userData = querySnap.docs[0].data();
+          const userData = querySnap.docs[0].data() as UserData;
           const userFavourites = await fetchUserFavorites(
             userData,
             landmarkRef
@@ -55,7 +59,7 @@ export const Favourites = () => {
     };
 
     fetchFavourites();
-  }, [auth.currentUser.email, landmarkRef, userRef]);
+  }, [auth.currentUser?.email, landmarkRef, userRef]);
 
   return (
     <>
@@ -76,7 +80,7 @@ export const Favourites = () => {
             </ul>
           </>
         )}
-        {favourites?.length === 0 && (
+        {!loading && favourites?.length === 0 && (
           <p className="text-[22px] text-center  italic mt-10">
             You have no favourited landmarks yet.
           </p>
