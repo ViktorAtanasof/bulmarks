@@ -14,6 +14,7 @@
 
 **Frontend**
 - [React 18.2.0](https://react.dev/)
+- [TypeScript 4.9.5](https://www.typescriptlang.org/)
 - [React-router-dom 6.9.0](https://reactrouter.com/en/main)
 - [React-hook-form 7.43.8](https://react-hook-form.com/)
 - [Tailwind CSS 3.2.7](https://tailwindcss.com/)
