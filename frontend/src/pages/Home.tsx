@@ -74,7 +74,7 @@ export const Home = () => {
                         </section>
                     </>
                 )}
-                {smallLandmarks?.length === 0 && largeLandmarks?.length === 0 && (
+                {!loading && smallLandmarks?.length === 0 && largeLandmarks?.length === 0 && (
                     <p className="text-4xl text-center italic">No landmarks available.</p>
                 )}
             </div>
