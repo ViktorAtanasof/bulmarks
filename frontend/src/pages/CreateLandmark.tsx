@@ -16,6 +16,8 @@ import { LandmarkFormData } from "../types/formTypes";
 export const CreateLandmark = () => {
   const navigate = useNavigate();
   const auth = getAuth();
+  // Temporary
+  // eslint-disable-next-line
   const [geolocationEnabled, setGeolocationEnabled] = useState(true);
   const [loading, setLoading] = useState(false);
   const [size, setSize] = useState<"small" | "large">("large");
