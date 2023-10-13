@@ -42,7 +42,7 @@ function App() {
           <Route path='/create-landmark' element={<PrivateRoute />}>
             <Route path='/create-landmark' element={<CreateLandmark />} />
           </Route>
-          <Route path='/edit-landmark' element={<PrivateRoute />}>
+          <Route path='/edit-landmark/:landmarkId' element={<PrivateRoute />}>
             <Route path='/edit-landmark/:landmarkId' element={<EditLandmark />} />
           </Route>
           <Route path='*' element={<NotFound />} />
