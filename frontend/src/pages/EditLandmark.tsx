@@ -65,10 +65,10 @@ export const EditLandmark = () => {
           setSize(landmarkData.size);
           setInitialValues({ ...landmarkData });
           setLoading(false);
+        } else {
+          navigate("/");
+          toast.error("Landmark does not exist.");
         }
-      } else {
-        navigate("/");
-        toast.error("Landmark does not exist.");
       }
     };
     fetchLandmark();
