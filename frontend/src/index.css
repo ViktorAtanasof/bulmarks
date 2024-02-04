@@ -2,8 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Light theme colors */
+:root {
+    --primary-color: #eff6ff;
+    --secondary-color: #1e293b;
+    --accent-color: #03cb97;
+}
+
+/* Dark theme colors */
+:root.dark {
+    --primary-color: #2a2829;
+    --secondary-color: #eff6ff;
+    --accent-color: #03cb97;
+}
+
 body {
-    background-color: #eff6ff;
+    background-color: var(--primary-color);
 }
 
 .swiper-button-next:after,
