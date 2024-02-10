@@ -2,6 +2,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState, useRef } from "react";
 import { useLocation, Link, useNavigate } from "react-router-dom";
 import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
+import { FaSun, FaMoon } from "react-icons/fa6";
 import logo from "../assets/logo/logo.webp";
 
 export const Header = () => {
@@ -9,6 +10,7 @@ export const Header = () => {
   const [showLogout, setShowLogout] = useState<string | null>(null);
   const [open, setOpen] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const [theme, setTheme] = useState("light");
   const location = useLocation();
   const navigate = useNavigate();
   const auth = getAuth();
@@ -19,7 +21,8 @@ export const Header = () => {
       if (
         window.innerWidth > 768 &&
         avatarRef.current &&
-        (avatarRef.current as HTMLElement).contains(event.target as Node) === false &&
+        (avatarRef.current as HTMLElement).contains(event.target as Node) ===
+          false &&
         event.target instanceof HTMLElement &&
         event.target.tagName !== "A"
       ) {
@@ -83,14 +86,34 @@ export const Header = () => {
     }
   };
 
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleThemeChange = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
+
   return (
-    <div className="bg-blue-50 border-b shadow-sm sticky top-0 z-40 pt-2">
+    <div className="bg-primary-color border-b shadow-sm sticky top-0 z-40 pt-2 transition-all duration-500 ease-in-out">
       <header className="md:flex justify-between items-center max-w-6xl md:px-3 md:mx-auto">
         <div>
           <Link className="inline-block w-auto" to={"/"}>
             <img src={logo} alt="logo" className="h-12 cursor-pointer px-3" />
           </Link>
         </div>
+        <button
+          className={`${
+            theme === "dark" && "text-secondary-color"
+          } ml-auto md:py-3 md:px-5 text-2xl md:relative md:right-auto md:top-auto absolute right-12 top-5 p-0`}
+          onClick={handleThemeChange}
+        >
+          {theme === "dark" ? <FaMoon /> : <FaSun />}
+        </button>
         <nav className="md:relative">
           <div
             onClick={() => setOpen(!open)}
@@ -99,8 +122,8 @@ export const Header = () => {
             {open ? <AiOutlineClose /> : <AiOutlineMenu />}
           </div>
           <ul
-            className={`absolute w-full bg-blue-50 md:static md:flex md:space-x-10
-                                    transition-all duration-500 ease-in-out items-center
+            className={`absolute w-full bg-primary-color md:static md:flex md:space-x-10
+            transition-all duration-500 ease-in-out items-center
                             ${
                               open
                                 ? `left-0 top-[13] opacity-100`
@@ -112,12 +135,12 @@ export const Header = () => {
                             cursor-pointer
                             text-sm 
                             font-semibold
-                            text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent 
                             ${
                               pathMatchRoute("/") &&
-                              "!font-bold !border-b-green-600"
+                              "!font-bold !border-b-accent-color"
                             }`}
             >
               <Link className="inline-block w-full py-3 px-3" to="/">
@@ -129,12 +152,12 @@ export const Header = () => {
                             cursor-pointer 
                             text-sm 
                             font-semibold
-                          text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent 
                             ${
                               pathMatchRoute("/landmarks") &&
-                              "!font-bold !border-b-green-600"
+                              "!font-bold !border-b-accent-color"
                             }`}
             >
               <Link className="inline-block w-full py-3 px-3" to="/landmarks">
@@ -146,7 +169,7 @@ export const Header = () => {
                             cursor-pointer 
                             text-sm 
                             font-semibold
-                          text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent 
                            `}
@@ -166,21 +189,21 @@ export const Header = () => {
             </li>
             {openProfile && (
               <ul
-                className="md:absolute bg-blue-50 md:top-[50px] md:right-0 md:drop-shadow-xl 
-                            md:rounded md:border-2"
+                className="md:absolute bg-primary-color md:top-[50px] md:right-0 md:drop-shadow-xl 
+                            md:rounded md:border-2 transition-all duration-500 ease-in-out"
               >
                 <li
                   className={`
                             cursor-pointer
                             text-sm 
                             font-semibold
-                          text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent
                             ${
                               (pathMatchRoute("/sign-in") ||
                                 pathMatchRoute("/profile")) &&
-                              "!font-bold !border-b-green-600"
+                              "!font-bold !border-b-accent-color"
                             }`}
                 >
                   <Link className="inline-block w-full py-3 px-3" to="/profile">
@@ -193,12 +216,12 @@ export const Header = () => {
                             cursor-pointer 
                             text-sm 
                             font-semibold
-                          text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent 
                             ${
                               pathMatchRoute("/profile/favourites") &&
-                              "!font-bold !border-b-green-600"
+                              "!font-bold !border-b-accent-color"
                             }`}
                   >
                     <Link
@@ -215,7 +238,7 @@ export const Header = () => {
                             cursor-pointer
                             text-sm 
                             font-semibold
-                          text-slate-800 
+                            text-secondary-color 
                             border-b-[3px] 
                             border-b-transparent"
                   >
