@@ -7,7 +7,6 @@
     --primary-color: #eff6ff;
     --secondary-color: #1e293b;
     --accent-color: #03cb97;
-    --box-color: #0000004a;
 }
 
 /* Dark theme colors */
@@ -15,7 +14,7 @@
     --primary-color: #2a2829;
     --secondary-color: #eff6ff;
     --accent-color: #03cb97;
-    --box-color: #03cb964b;
+    --ldark-color: rgba(85, 81, 81, 0.224);
 }
 
 body {
