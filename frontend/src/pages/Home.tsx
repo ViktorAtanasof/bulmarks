@@ -55,7 +55,7 @@ export const Home = () => {
                                 text-center text-white">
                     <p className="text-sm md:text-2xl tracking-widest">EXPLORE THE BEST</p>
                     <h1 className="text-6xl md:text-8xl lg:text-9xl">
-                        <span className="text-[#3c637a]">Bul</span>garian Land<span className="text-[#03cb97]">marks</span>
+                        <span className="text-[#3c637a]">Bul</span>garian Land<span className="text-accent-color">marks</span>
                     </h1>
                 </div>
             </section>
@@ -75,7 +75,7 @@ export const Home = () => {
                     </>
                 )}
                 {!loading && smallLandmarks?.length === 0 && largeLandmarks?.length === 0 && (
-                    <p className="text-4xl text-center italic">No landmarks available.</p>
+                    <p className="text-4xl text-center italic my-12 text-secondary-color">No landmarks available</p>
                 )}
             </div>
         </main>
