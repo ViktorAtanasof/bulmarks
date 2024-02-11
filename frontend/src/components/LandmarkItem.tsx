@@ -17,8 +17,8 @@ export const LandmarkItem = ({
     onEdit,
 }: LandmarkItemProps) => {
     return (
-        <li className="relative bg-primary-color flex flex-col justify-between items-center 
-                       shadow-md shadow-box-color hover:shadow-box-color hover:shadow-xl rounded-md overflow-hidden
+        <li className="relative dark:bg-ldark-color flex flex-col justify-between items-center 
+                       shadow-md hover:shadow-xl rounded-md overflow-hidden
                        transition-shadow duration-150 m-[10px]">
             <Link to={`/category/${landmark.size}/${id}`} className="contents">
                 <img
