@@ -7,6 +7,7 @@
     --primary-color: #eff6ff;
     --secondary-color: #1e293b;
     --accent-color: #03cb97;
+    --map-color: unset;
 }
 
 /* Dark theme colors */
@@ -15,6 +16,14 @@
     --secondary-color: #eff6ff;
     --accent-color: #03cb97;
     --ldark-color: rgba(85, 81, 81, 0.224);
+    --map-color: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+}
+
+.leaflet-layer,
+.leaflet-control-zoom-in,
+.leaflet-control-zoom-out,
+.leaflet-control-attribution {
+  filter: var(--map-color);
 }
 
 body {
