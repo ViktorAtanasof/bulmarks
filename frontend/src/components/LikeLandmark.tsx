@@ -64,7 +64,7 @@ export const LikeLandmark = ({ id, likes }: LikeLandmarkProps) => {
       {user && !isOwner && (
         <div
           className={`flex items-center ${
-            liked ? "text-red-800" : "text-rose-500"
+            liked ? "text-red-700" : "text-rose-500"
           } cursor-pointer`}
           onClick={handleLike}
         >

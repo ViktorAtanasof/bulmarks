@@ -75,7 +75,7 @@ export const FavouriteLandmark = ({ id }: FavouriteLandmarkProps) => {
       {user && !isOwner && (
         <div
           className={`flex items-center ${
-            favourited ? "text-yellow-800" : "text-yellow-500"
+            favourited ? "text-yellow-700" : "text-yellow-500"
           } cursor-pointer`}
           onClick={handleFavourite}
         >
