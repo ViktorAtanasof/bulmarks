@@ -75,15 +75,15 @@ export const Landmark = () => {
       </Swiper>
       <div
         className="m-4 flex flex-col md:flex-row max-w-6xl 
-                           lg:mx-auto p-4 rounded-lg shadow-lg bg-white 
+                           lg:mx-auto p-4 rounded-lg shadow-lg dark:bg-ldark-color 
                            lg:space-x-5"
       >
         <div className="w-full h-[50%] lg:h-[400px]">
-          <p className="text-2xl font-bold mb-3 text-[#222643]">
+          <p className="text-2xl font-bold mb-3 text-secondary-color">
             {landmark?.name}
           </p>
-          <p className="flex items-center mt-6 mb-3 font-semibold">
-            <FaMapMarkerAlt className="mr-1 text-green-700" />
+          <p className="flex items-center mt-6 mb-3 font-semibold text-gray-600 dark:text-gray-300">
+            <FaMapMarkerAlt className="mr-1 text-green-600" />
             {landmark?.address}
           </p>
           <div className="flex justify-start items-center space-x-4 w-[75%]">
@@ -100,7 +100,7 @@ export const Landmark = () => {
               {landmark?.type}
             </p>
           </div>
-          <p className="mt-3 mb-3">
+          <p className="mt-3 mb-3 text-secondary-color">
             <span className="font-semibold">Description - </span>
             {landmark?.description}
           </p>
