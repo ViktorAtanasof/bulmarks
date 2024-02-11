@@ -9,6 +9,7 @@ module.exports = {
         "primary-color": "var(--primary-color)",
         "secondary-color": "var(--secondary-color)",
         "accent-color": "var(--accent-color)",
+        "box-color": "var(--box-color)",
       }
     },
   },
