@@ -12,7 +12,7 @@ export const InputField = ({
 }: InputFieldProps) => {
     return (
         <>
-            <label htmlFor={name} className="text-lg font-semibold block">
+            <label htmlFor={name} className="text-lg font-semibold block text-secondary-color">
                 {label}
             </label>
             <input
@@ -25,10 +25,10 @@ export const InputField = ({
                     maxLength: maxLength,
                 })}
                 className={`w-full px-4 py-2 text-xl 
-                      text-gray-700 bg-white border border-gray-300 
-                      rounded transition duration-150 ease-in-out focus:text-gray-700
-                      focus:bg-white focus:border-slate-600 mb-4
-                      ${errors[name] && 'border-red-600 border-1'}`}
+                      text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                      rounded transition duration-150 ease-in-out focus:text-accent-color
+                      focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300 mb-4
+                      ${errors[name] && 'border-red-600 border-1 dark:border-2'}`}
             />
             {errors[name] && (
                 <div className="mb-4">
