@@ -14,7 +14,7 @@ export const LandmarkCategory = ({
       <Link to={`/category/${category}`}>
         <p
           className="px-3 text-sm text-blue-600 hover:text-blue-800 
-        dark:text-accent-color dark:hover:text-box-color transition duration-150 ease-in-out"
+        dark:text-accent-color dark:hover:text-[#03cb96ce] transition duration-150 ease-in-out"
         >
           Show more {category} landmarks
         </p>
