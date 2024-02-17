@@ -81,7 +81,7 @@ export const Category = () => {
 
     return (
         <div className="max-w-6xl mx-auto px-3">
-            <h1 className="text-3xl text-center mt-6 mb-6 font-bold">
+            <h1 className="text-3xl text-center mt-6 mb-6 font-bold text-secondary-color">
                 {params.categoryName === 'small' ? 'Small landmarks' : 'Large landmarks'}
             </h1>
             {loading ? (
@@ -103,9 +103,9 @@ export const Category = () => {
                         <div className="flex justify-center items-center">
                             <button
                                 onClick={onFetchMoreLandmarks}
-                                className="bg-white px-3 py-1.5 text-gray-700 border 
-                                           border-gray-300 mb-6 mt-6 hover:border-slate-600 rounded
-                                           transition duration-150 ease-in-out"
+                                className="bg-secondary-color px-3 py-1.5 text-primary-color border 
+                                           mb-6 mt-6 hover:text-accent-color rounded
+                                           transition duration-300 ease-in-out"
                             >
                                 Load more</button>
                         </div>
