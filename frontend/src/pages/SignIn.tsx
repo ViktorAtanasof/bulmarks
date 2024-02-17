@@ -46,7 +46,7 @@ export const SignIn = () => {
 
   return (
     <section>
-      <h1 className="text-3xl text-center mt-6 font-bold">Sign In</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">Sign In</h1>
       <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
         <div className="relative md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img src={lock} alt="padlock" className="w-full rounded-2xl" />
@@ -69,11 +69,12 @@ export const SignIn = () => {
           <form onSubmit={handleSubmit(onSubmit)}>
             <input
               className={`w-full px-4 py-2 text-xl mb-4
-                                     text-gray-700 bg-white border-gray-300 
-                                       rounded transition ease-in-out
+              text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+              rounded transition duration-150 ease-in-out focus:text-accent-color
+              focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300
                                        ${
                                          errors.email &&
-                                         "border-red-600 border-1"
+                                         "border-red-600 border-1 dark:border-2"
                                        }`}
               type="email"
               id="email"
@@ -101,11 +102,12 @@ export const SignIn = () => {
             <div className="relative">
               <input
                 className={`w-full px-4 py-2 text-xl mb-4
-                                     text-gray-700 bg-white border-gray-300 
-                                       rounded transition ease-in-out
+                text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                rounded transition duration-150 ease-in-out focus:text-accent-color
+                focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300
                                        ${
                                          errors.password &&
-                                         "border-red-600 border-1"
+                                         "border-red-600 border-1 dark:border-2"
                                        }`}
                 type={showPassword ? "text" : "password"}
                 id="password"
@@ -137,22 +139,22 @@ export const SignIn = () => {
               )}
               {showPassword ? (
                 <AiFillEyeInvisible
-                  className="absolute right-3 top-3 text-xl cursor-pointer"
+                  className="absolute right-3 top-3 text-xl cursor-pointer text-accent-color"
                   onClick={onClickPasswordIcon}
                 />
               ) : (
                 <AiFillEye
-                  className="absolute right-3 top-3 text-xl cursor-pointer"
+                  className="absolute right-3 top-3 text-xl cursor-pointer text-accent-color"
                   onClick={onClickPasswordIcon}
                 />
               )}
             </div>
-            <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg">
+            <div className="flex justify-between whitespace-nowrap text-sm sm:text-lg text-secondary-color">
               <p className="mb-6">
                 Don't have an account?
                 <Link
                   to="/sign-up"
-                  className="text-green-600 hover:text-green-700 hover:underline ml-1"
+                  className=" text-accent-color hover:text-[#209475cb] hover:underline ml-1"
                 >
                   Sign up
                 </Link>
@@ -180,7 +182,7 @@ export const SignIn = () => {
                                    before:border-t before:flex-1 before:border-gray-300
                                    after:border-t after:flex-1 after:border-gray-300"
             >
-              <p className="text-center font-semibold mx-4">OR</p>
+              <p className="text-center font-semibold mx-4 text-secondary-color">OR</p>
             </div>
             <OAuth />
           </form>
