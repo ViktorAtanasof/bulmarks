@@ -25,7 +25,7 @@ export const CreateLandmark = () => {
     register,
     handleSubmit,
     formState: { errors },
-    setValue
+    setValue,
   } = useForm<LandmarkFormData>({
     defaultValues: {
       size: "large",
@@ -92,7 +92,8 @@ export const CreateLandmark = () => {
       userRef: auth.currentUser?.uid,
       likes: [],
     };
-    const { images, latitude, longitude, ...formDataWithoutUnwantedProps } = formDataCopy;
+    const { images, latitude, longitude, ...formDataWithoutUnwantedProps } =
+      formDataCopy;
 
     const docRef = await addDoc(
       collection(db, "landmarks"),
@@ -109,9 +110,13 @@ export const CreateLandmark = () => {
 
   return (
     <main className="max-w-md px-2 mx-auto">
-      <h1 className="text-3xl text-center mt-6 font-bold">Mark a Landmark</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">
+        Mark a Landmark
+      </h1>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <p className="text-lg mt-6 font-semibold">Small / Large</p>
+        <p className="text-lg mt-6 font-semibold text-secondary-color">
+          Small / Large
+        </p>
         <div className="flex">
           <SizeButton onChangeSize={onChangeSize} size={size} />
         </div>
@@ -145,7 +150,10 @@ export const CreateLandmark = () => {
           maxLength={20}
           required={true}
         />
-        <label htmlFor="address" className="text-lg font-semibold block">
+        <label
+          htmlFor="address"
+          className="text-lg font-semibold block text-secondary-color"
+        >
           Address
         </label>
         <textarea
@@ -155,10 +163,10 @@ export const CreateLandmark = () => {
           })}
           placeholder="Address"
           className={`w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.address && "border-red-600 border-1"}`}
+                        text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                        rounded transition duration-150 ease-in-out focus:text-accent-color
+                        focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300 mb-4
+                        ${errors.address && "border-red-600 border-1 dark:border-2"}`}
         />
         {errors.address && (
           <div className="mb-4">
@@ -170,7 +178,10 @@ export const CreateLandmark = () => {
         {!geolocationEnabled && (
           <div className="flex space-x-6 justify-start mb-6">
             <div>
-              <label htmlFor="latitude" className="text-lg font-semibold block">
+              <label
+                htmlFor="latitude"
+                className="text-lg font-semibold block text-secondary-color"
+              >
                 Latitude
               </label>
               <input
@@ -182,15 +193,16 @@ export const CreateLandmark = () => {
                 min="-90"
                 max="90"
                 className="w-full px-4 py-2 text-xl 
-                             text-gray-700 bg-white border border-gray-300 
-                             rounded transition duration-150 ease-in-out focus:text-gray-700
-                             focus:bg-white focus:border-slate-600 text-center"
+                             text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                             rounded transition duration-150 ease-in-out focus:text-accent-color
+                             focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300
+                             text-center"
               />
             </div>
             <div>
               <label
                 htmlFor="longitude"
-                className="text-lg font-semibold block"
+                className="text-lg font-semibold block text-secondary-color"
               >
                 Longitude
               </label>
@@ -203,14 +215,18 @@ export const CreateLandmark = () => {
                 min="-180"
                 max="180"
                 className="w-full px-4 py-2 text-xl 
-                             text-gray-700 bg-white border border-gray-300 
-                             rounded transition duration-150 ease-in-out focus:text-gray-700
-                             focus:bg-white focus:border-slate-600 text-center "
+                             text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                             rounded transition duration-150 ease-in-out focus:text-accent-color
+                             focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300
+                             text-center "
               />
             </div>
           </div>
         )}
-        <label htmlFor="description" className="text-lg font-semibold block">
+        <label
+          htmlFor="description"
+          className="text-lg font-semibold block text-secondary-color"
+        >
           Description
         </label>
         <textarea
@@ -222,10 +238,10 @@ export const CreateLandmark = () => {
           })}
           placeholder="Description"
           className={`w-full px-4 py-2 text-xl 
-                        text-gray-700 bg-white border border-gray-300 
-                        rounded transition duration-150 ease-in-out focus:text-gray-700
-                        focus:bg-white focus:border-slate-600 mb-4
-                        ${errors.description && "border-red-600 border-1"}`}
+                      text-secondary-color bg-white dark:bg-ldark-color border border-gray-300 
+                      rounded transition duration-150 ease-in-out focus:text-accent-color
+                      focus:outline-none focus:ring-0 focus:border-accent-color dark:placeholder-gray-300 mb-4
+                        ${errors.description && "border-red-600 border-1 dark:border-2"}`}
         />
         {errors.description && (
           <div className="mb-4">
@@ -247,11 +263,11 @@ export const CreateLandmark = () => {
           </div>
         )}
         <div className="mb-4 relative">
-          <label htmlFor="images" className="text-lg font-semibold block">
+          <label htmlFor="images" className="text-lg font-semibold block text-secondary-color">
             Images
           </label>
           <div className="group absolute left-16 top-2">
-            <AiOutlineInfoCircle className="cursor-pointer" />
+            <AiOutlineInfoCircle className="cursor-pointer text-green-500" />
             <span
               className="absolute top-[-10px] left-5 whitespace-nowrap scale-0 
                                 rounded bg-slate-700 p-2 text-xs text-white group-hover:scale-100"
@@ -259,7 +275,7 @@ export const CreateLandmark = () => {
               Use horizontal images for the best visualization.
             </span>
           </div>
-          <p className="text-gray-600">
+          <p className="text-gray-600 dark:text-gray-300 my-1">
             The first image will be the cover (max 6 images)
           </p>
           <input
