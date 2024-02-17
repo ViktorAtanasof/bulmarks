@@ -64,7 +64,7 @@ export const Favourites = () => {
   return (
     <>
       <section className="max-w-6xl px-3 mt-6 mx-auto">
-        <h1 className="text-3xl text-center mt-6 font-bold">My Favourites</h1>
+        <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">My Favourites</h1>
         {!loading && favourites?.length > 0 && (
           <>
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
@@ -81,7 +81,7 @@ export const Favourites = () => {
           </>
         )}
         {!loading && favourites?.length === 0 && (
-          <p className="text-[22px] text-center  italic mt-10">
+          <p className="text-[22px] text-center italic mt-10 text-secondary-color">
             You have no favourited landmarks yet.
           </p>
         )}
