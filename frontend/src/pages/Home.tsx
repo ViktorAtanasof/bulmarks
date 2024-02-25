@@ -1,83 +1,109 @@
-import { collection, getDocs, limit, orderBy, query, where } from "firebase/firestore";
+import {
+  collection,
+  getDocs,
+  limit,
+  orderBy,
+  query,
+  where,
+} from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { db } from "../firebase";
-import bulgaria from '../assets/images/bulgaria.jpg';
+import bulgaria from "../assets/images/bulgaria.jpg";
 import { Spinner } from "../components/Spinner";
 import { LandmarkCategory } from "../components/LandmarkCategory";
-import { LandmarkData } from "../types/landmarkTypes";
+import { Landmark, LandmarkData } from "../types/landmarkTypes";
 
 export const Home = () => {
-    const [loading, setLoading] = useState(true);
-    const [smallLandmarks, setSmallLandmarks] = useState<LandmarkData[]>([]);
-    const [largeLandmarks, setLargeLandmarks] = useState<LandmarkData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [landmarks, setLandmarks] = useState<{
+    small: LandmarkData[];
+    large: LandmarkData[];
+  }>({ small: [], large: [] });
 
-    useEffect(() => {
-        const fetchLandmarks = async (size: 'large' | 'small') => {
-            try {
-                const landmarksRef = collection(db, 'landmarks');
-                const q = query(
-                    landmarksRef,
-                    where('size', '==', size),
-                    orderBy('timestamp', 'desc'),
-                    limit(4),
-                );
-                const querySnap = await getDocs(q);
-                const landmarks: LandmarkData[] = [];
-                querySnap.forEach((doc) => {
-                    return landmarks.push({
-                        id: doc.id,
-                        data: doc.data() as LandmarkData['data'],
-                    });
-                });
-                if (size === 'small') {
-                    setSmallLandmarks(landmarks);
-                } else if (size === 'large') {
-                    setLargeLandmarks(landmarks);
-                }
-                setLoading(false);
-            } catch (error) {
-                console.log(error);
-            }
-        }
-        fetchLandmarks('small');
-        fetchLandmarks('large');
-    }, []);
+  useEffect(() => {
+    const fetchLandmarks = async () => {
+      try {
+        const landmarksRef = collection(db, "landmarks");
+        const queries = [
+          query(
+            landmarksRef,
+            orderBy("timestamp", "desc"),
+            where("size", "==", "small"),
+            limit(4)
+          ),
+          query(
+            landmarksRef,
+            orderBy("timestamp", "desc"),
+            where("size", "==", "large"),
+            limit(4)
+          ),
+        ];
 
-    return (
-        <main>
-            <section className="relative">
-                <img
-                    className="w-full h-[500px] object-cover brightness-75"
-                    src={bulgaria}
-                    alt="landscape"
-                    />
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
-                                text-center text-white">
-                    <p className="text-sm md:text-2xl tracking-widest">EXPLORE THE BEST</p>
-                    <h1 className="text-6xl md:text-8xl lg:text-9xl">
-                        <span className="text-[#3c637a]">Bul</span>garian Land<span className="text-accent-color">marks</span>
-                    </h1>
-                </div>
-            </section>
-            <div>
-                {loading ? (
-                    <Spinner />
-                ) : (
-                    <>
-                        <section className="max-w-6xl mx-auto pt-4 space-y-6">
-                            {smallLandmarks?.length > 0 && (
-                                <LandmarkCategory landmarks={smallLandmarks} category={"small"} />
-                            )}
-                            {largeLandmarks?.length > 0 && (
-                                <LandmarkCategory landmarks={largeLandmarks} category={"large"} />
-                            )}
-                        </section>
-                    </>
-                )}
-                {!loading && smallLandmarks?.length === 0 && largeLandmarks?.length === 0 && (
-                    <p className="text-4xl text-center italic my-12 text-secondary-color">No landmarks available</p>
-                )}
-            </div>
-        </main>
-    );
+        // Fetch data from both queries concurrently
+        const snapshots = await Promise.all(queries.map(getDocs));
+
+        const smallLandmarks: LandmarkData[] = [];
+        const largeLandmarks: LandmarkData[] = [];
+
+        // Process results for each query
+        snapshots.forEach((snapshot, index) => {
+          const size = index === 0 ? "small" : "large";
+          const sizeArray = size === "small" ? smallLandmarks : largeLandmarks;
+
+          snapshot.forEach((doc) => {
+            const data = doc.data() as Landmark;
+            sizeArray.push({ id: doc.id, data });
+          });
+        });
+
+        setLandmarks({ small: smallLandmarks, large: largeLandmarks });
+        setLoading(false);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchLandmarks();
+  }, []);
+
+  return (
+    <main>
+      <section className="relative">
+        <img
+          className="w-full h-[500px] object-cover brightness-75"
+          src={bulgaria}
+          alt="landscape"
+        />
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
+                                text-center text-white"
+        >
+          <p className="text-sm md:text-2xl tracking-widest">
+            EXPLORE THE BEST
+          </p>
+          <h1 className="text-6xl md:text-8xl lg:text-9xl">
+            <span className="text-[#3c637a]">Bul</span>garian Land
+            <span className="text-accent-color">marks</span>
+          </h1>
+        </div>
+      </section>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <section className="max-w-6xl mx-auto pt-4 space-y-6">
+          {landmarks.small?.length === 0 && landmarks.large?.length === 0 && (
+            <p className="text-4xl text-center italic my-12 text-secondary-color">
+              No landmarks available
+            </p>
+          )}
+          {landmarks.small?.length > 0 && (
+            <LandmarkCategory landmarks={landmarks.small} category={"small"} />
+          )}
+          {landmarks.large?.length > 0 && (
+            <LandmarkCategory landmarks={landmarks.large} category={"large"} />
+          )}
+        </section>
+      )}
+    </main>
+  );
 };
