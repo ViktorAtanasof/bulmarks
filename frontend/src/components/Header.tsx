@@ -105,10 +105,8 @@ export const Header = memo(() => {
         </div>
         <button
           className={`text-secondary-color ml-auto md:py-3 md:px-5 text-2xl md:relative md:right-auto md:top-auto 
-          absolute right-12 top-5 p-0 ${
-            theme === "dark"
-          }`}
-          aria-label="Open menu"
+          absolute right-12 top-5 p-0 ${theme === "dark"}`}
+          aria-label="Change theme"
           onClick={handleThemeChange}
         >
           {theme === "dark" ? <FaMoon /> : <FaSun />}
@@ -117,6 +115,7 @@ export const Header = memo(() => {
           <button
             className="text-3xl absolute right-2 top-4 cursor-pointer md:hidden text-secondary-color"
             onClick={handleOpenMenu}
+            aria-label="Open menu"
           >
             {openMenu ? <AiOutlineClose /> : <AiOutlineMenu />}
           </button>
