@@ -14,6 +14,7 @@ import { getAuth } from "firebase/auth";
 import { LandmarkItem } from "../components/LandmarkItem";
 import { LandmarkData } from "../types/landmarkTypes";
 import { UserData } from "../types/authTypes";
+import { toast } from "react-toastify";
 
 export const Favourites = () => {
   const auth = getAuth();
@@ -23,7 +24,10 @@ export const Favourites = () => {
   const landmarkRef = collection(db, "landmarks");
 
   // Function to fetch user's favorite landmarks
-  const fetchUserFavorites = async (userData: UserData, landmarkRef: CollectionReference<DocumentData>) => {
+  const fetchUserFavorites = async (
+    userData: UserData,
+    landmarkRef: CollectionReference<DocumentData>
+  ) => {
     const landmarks: LandmarkData[] = [];
     for (const landmarkId of userData.favourites) {
       const docRef = doc(landmarkRef, landmarkId);
@@ -31,7 +35,7 @@ export const Favourites = () => {
       if (docSnap.exists()) {
         landmarks.push({
           id: docSnap.id,
-          data: docSnap.data() as LandmarkData['data'],
+          data: docSnap.data() as LandmarkData["data"],
         });
       }
     }
@@ -51,10 +55,10 @@ export const Favourites = () => {
           );
           setFavourites(userFavourites);
         }
-      } catch (error) {
-        console.error("Error fetching user favorites:", error);
-      } finally {
         setLoading(false);
+      } catch (error) {
+        toast.error("Error fetching user favorites");
+        console.error("Error fetching user favorites:", error);
       }
     };
 
@@ -64,7 +68,9 @@ export const Favourites = () => {
   return (
     <>
       <section className="max-w-6xl px-3 mt-6 mx-auto">
-        <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">My Favourites</h1>
+        <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">
+          My Favourites
+        </h1>
         {!loading && favourites?.length > 0 && (
           <>
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
