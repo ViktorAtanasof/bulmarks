@@ -104,9 +104,11 @@ export const Header = memo(() => {
           </Link>
         </div>
         <button
-          className={`text-secondary-color ml-auto md:py-3 md:px-5 text-2xl md:relative md:right-auto md:top-auto absolute right-12 top-5 p-0 ${
+          className={`text-secondary-color ml-auto md:py-3 md:px-5 text-2xl md:relative md:right-auto md:top-auto 
+          absolute right-12 top-5 p-0 ${
             theme === "dark"
           }`}
+          aria-label="Open menu"
           onClick={handleThemeChange}
         >
           {theme === "dark" ? <FaMoon /> : <FaSun />}
@@ -119,7 +121,8 @@ export const Header = memo(() => {
             {openMenu ? <AiOutlineClose /> : <AiOutlineMenu />}
           </button>
           <ul
-            className={`absolute w-full bg-primary-color md:static md:flex md:space-x-10 transition-all duration-500 ease-in-out items-center ${
+            className={`absolute w-full bg-primary-color md:static md:flex md:space-x-10 transition-all 
+            duration-500 ease-in-out items-center ${
               openMenu
                 ? "left-0 top-[13] opacity-100"
                 : "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
