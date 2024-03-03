@@ -11,6 +11,7 @@ import lock from "../assets/images/lock.jpg";
 
 export const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -22,31 +23,25 @@ export const SignIn = () => {
     },
   });
 
-  const navigate = useNavigate();
-
-  const onClickPasswordIcon = () => {
-    setShowPassword((prevState) => !prevState);
-  };
-
   const onSubmit = async (data: AuthFormData) => {
     try {
       const auth = getAuth();
-      const userCredentials = await signInWithEmailAndPassword(
-        auth,
-        data.email,
-        data.password
-      );
-      if (userCredentials.user) {
-        navigate("/");
-      }
+      await signInWithEmailAndPassword(auth, data.email, data.password);
+      navigate("/");
     } catch (error) {
-      toast.error("Bad user credentials.");
+      toast.error("Bad user credentials");
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword((prevState) => !prevState);
   };
 
   return (
     <section>
-      <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">Sign In</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold text-secondary-color">
+        Sign In
+      </h1>
       <div className="flex justify-center flex-wrap items-center px-6 py-12 max-w-6xl mx-auto">
         <div className="relative md:w-[67%] lg:w-[50%] mb-12 md:mb-6">
           <img src={lock} alt="padlock" className="w-full rounded-2xl" />
@@ -140,12 +135,12 @@ export const SignIn = () => {
               {showPassword ? (
                 <AiFillEyeInvisible
                   className="absolute right-3 top-3 text-xl cursor-pointer text-accent-color"
-                  onClick={onClickPasswordIcon}
+                  onClick={togglePasswordVisibility}
                 />
               ) : (
                 <AiFillEye
                   className="absolute right-3 top-3 text-xl cursor-pointer text-accent-color"
-                  onClick={onClickPasswordIcon}
+                  onClick={togglePasswordVisibility}
                 />
               )}
             </div>
@@ -182,7 +177,9 @@ export const SignIn = () => {
                                    before:border-t before:flex-1 before:border-gray-300
                                    after:border-t after:flex-1 after:border-gray-300"
             >
-              <p className="text-center font-semibold mx-4 text-secondary-color">OR</p>
+              <p className="text-center font-semibold mx-4 text-secondary-color">
+                OR
+              </p>
             </div>
             <OAuth />
           </form>
