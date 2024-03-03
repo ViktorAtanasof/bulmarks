@@ -24,6 +24,7 @@ export const Profile = () => {
   const [changeDetail, setChangeDetail] = useState(false);
   const [landmarks, setLandmarks] = useState<LandmarkData[]>([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -34,8 +35,6 @@ export const Profile = () => {
       email: auth.currentUser?.email,
     },
   });
-
-  const navigate = useNavigate();
 
   const onSubmit = async (data: ProfileFormData) => {
     try {
@@ -49,10 +48,11 @@ export const Profile = () => {
         await updateDoc(docRef, {
           username,
         });
-        toast.success("Profile details updated.");
+        toast.success("Profile details updated");
       }
     } catch (error) {
-      toast.error("Could not update the profile details.");
+      toast.error("Could not update the profile details");
+      console.error("Could not update the profile details:", error);
     }
   };
 
@@ -115,7 +115,10 @@ export const Profile = () => {
                     text-gray-700 bg-gray-300 border border-gray-300 
                       rounded transition duration-150 ease-in-out focus:text-accent-color
                       focus:outline-none focus:ring-0 focus:border-accent-color
-                                       ${changeDetail && "bg-zinc-50 dark:bg-ldark-color text-secondary-color"}
+                                       ${
+                                         changeDetail &&
+                                         "bg-zinc-50 dark:bg-ldark-color text-secondary-color"
+                                       }
                                        ${
                                          errors.username &&
                                          "border-red-600 border-2"
@@ -204,7 +207,7 @@ export const Profile = () => {
           </>
         )}
         {!loading && landmarks?.length === 0 && (
-          <p className="text-[22px] text-center  italic mt-10">
+          <p className="text-[22px] text-center text-secondary-color italic mt-10">
             You have no marked landmarks yet.
           </p>
         )}

@@ -13,7 +13,7 @@ export const storeImage = async (img: File) => {
 
             // Check the image size before uploading
             if (img.size > 5242880) {
-                reject(new Error('Image/s must be less than 5 MB.'));
+                reject(new Error('Image/s must be less than 5 MB'));
                 return;
             };
 
