@@ -54,7 +54,7 @@ export const CreateLandmark = () => {
       return;
     }
 
-    let geolocation = {};
+    let geolocation;
     let location;
     if (geolocationEnabled) {
       const result = await handleGeolocation(data);
@@ -62,7 +62,7 @@ export const CreateLandmark = () => {
       location = result.location;
       if (location === undefined) {
         setLoading(false);
-        toast.error("Please enter a correct address.");
+        toast.error("Please enter a correct address");
         return;
       }
     } else {
@@ -76,11 +76,7 @@ export const CreateLandmark = () => {
       );
     } catch (error: any) {
       setLoading(false);
-      if (error.message === "Image/s must be less than 5 MB.") {
-        toast.error("Image/s must be less than 5 MB.");
-      } else {
-        toast.error("Images not uploaded.");
-      }
+      toast.error(error.message || "Images not uploaded");
       return;
     }
 
