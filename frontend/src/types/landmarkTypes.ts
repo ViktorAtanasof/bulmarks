@@ -36,7 +36,3 @@ export type LikeLandmarkProps = {
 export type FavouriteLandmarkProps = {
     id: string;
 };
-
-export type LandmarkParams = {
-    landmarkId: string;
-}
