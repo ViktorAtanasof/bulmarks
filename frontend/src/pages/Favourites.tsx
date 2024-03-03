@@ -19,46 +19,36 @@ import { toast } from "react-toastify";
 export const Favourites = () => {
   const auth = getAuth();
   const [favourites, setFavourites] = useState<LandmarkData[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const userRef = collection(db, "users");
   const landmarkRef = collection(db, "landmarks");
 
-  // Function to fetch user's favorite landmarks
   const fetchUserFavorites = async (
     userData: UserData,
     landmarkRef: CollectionReference<DocumentData>
   ) => {
-    const landmarks: LandmarkData[] = [];
-    for (const landmarkId of userData.favourites) {
-      const docRef = doc(landmarkRef, landmarkId);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        landmarks.push({
-          id: docSnap.id,
-          data: docSnap.data() as LandmarkData["data"],
-        });
-      }
-    }
-    return landmarks;
+    const promises = userData.favourites.map((landmarkId) =>
+      getDoc(doc(landmarkRef, landmarkId))
+    );
+    const landmarks = await Promise.all(promises);
+    return landmarks.map((docSnap) => ({
+      id: docSnap.id,
+      data: docSnap.data() as LandmarkData["data"],
+    }));
   };
 
   useEffect(() => {
     const fetchFavourites = async () => {
       try {
         const q = query(userRef, where("email", "==", auth.currentUser?.email));
-        const querySnap = await getDocs(q);
-        if (!querySnap.empty) {
-          const userData = querySnap.docs[0].data() as UserData;
-          const userFavourites = await fetchUserFavorites(
-            userData,
-            landmarkRef
-          );
-          setFavourites(userFavourites);
-        }
-        setLoading(false);
+        const userData = (await getDocs(q)).docs[0].data() as UserData;
+        const userFavourites = await fetchUserFavorites(userData, landmarkRef);
+        setFavourites(userFavourites);
       } catch (error) {
         toast.error("Error fetching user favorites");
         console.error("Error fetching user favorites:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
