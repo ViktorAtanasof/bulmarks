@@ -73,6 +73,8 @@ export const Home = () => {
           className="w-full h-[500px] object-cover brightness-75"
           src={bulgaria}
           alt="landscape"
+          width={2400}
+          height={1798}
         />
         <div
           className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 
