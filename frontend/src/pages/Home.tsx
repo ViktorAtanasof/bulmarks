@@ -24,37 +24,33 @@ export const Home = () => {
     const fetchLandmarks = async () => {
       try {
         const landmarksRef = collection(db, "landmarks");
-        const queries = [
-          query(
-            landmarksRef,
-            orderBy("timestamp", "desc"),
-            where("size", "==", "small"),
-            limit(4)
-          ),
-          query(
-            landmarksRef,
-            orderBy("timestamp", "desc"),
-            where("size", "==", "large"),
-            limit(4)
-          ),
-        ];
+        const smallQuery = query(
+          landmarksRef,
+          orderBy("timestamp", "desc"),
+          where("size", "==", "small"),
+          limit(4)
+        );
+        const largeQuery = query(
+          landmarksRef,
+          orderBy("timestamp", "desc"),
+          where("size", "==", "large"),
+          limit(4)
+        );
 
         // Fetch data from both queries concurrently
-        const snapshots = await Promise.all(queries.map(getDocs));
+        const [smallSnapshots, largeSnapshots] = await Promise.all([
+          getDocs(smallQuery),
+          getDocs(largeQuery),
+        ]);
 
-        const smallLandmarks: LandmarkData[] = [];
-        const largeLandmarks: LandmarkData[] = [];
-
-        // Process results for each query
-        snapshots.forEach((snapshot, index) => {
-          const size = index === 0 ? "small" : "large";
-          const sizeArray = size === "small" ? smallLandmarks : largeLandmarks;
-
-          snapshot.forEach((doc) => {
-            const data = doc.data() as Landmark;
-            sizeArray.push({ id: doc.id, data });
-          });
-        });
+        const smallLandmarks = smallSnapshots.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data() as Landmark,
+        }));
+        const largeLandmarks = largeSnapshots.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data() as Landmark,
+        }));
 
         setLandmarks({ small: smallLandmarks, large: largeLandmarks });
         setLoading(false);
@@ -65,6 +61,48 @@ export const Home = () => {
 
     fetchLandmarks();
   }, []);
+
+  // const fetchLandmarks = async () => {
+  //   try {
+  //     const landmarksRef = collection(db, "landmarks");
+  //     const queries = [
+  //       query(
+  //         landmarksRef,
+  //         orderBy("timestamp", "desc"),
+  //         where("size", "==", "small"),
+  //         limit(4)
+  //       ),
+  //       query(
+  //         landmarksRef,
+  //         orderBy("timestamp", "desc"),
+  //         where("size", "==", "large"),
+  //         limit(4)
+  //       ),
+  //     ];
+
+  //     // Fetch data from both queries concurrently
+  //     const snapshots = await Promise.all(queries.map(getDocs));
+
+  //     const smallLandmarks: LandmarkData[] = [];
+  //     const largeLandmarks: LandmarkData[] = [];
+
+  //     // Process results for each query
+  //     snapshots.forEach((snapshot, index) => {
+  //       const size = index === 0 ? "small" : "large";
+  //       const sizeArray = size === "small" ? smallLandmarks : largeLandmarks;
+
+  //       snapshot.forEach((doc) => {
+  //         const data = doc.data() as Landmark;
+  //         sizeArray.push({ id: doc.id, data });
+  //       });
+  //     });
+
+  //     setLandmarks({ small: smallLandmarks, large: largeLandmarks });
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // };
 
   return (
     <main>
