@@ -13,13 +13,18 @@ import { LandmarkItem } from "../components/LandmarkItem";
 import { Spinner } from "../components/Spinner";
 import { db } from "../firebase";
 import { LandmarkData } from "../types/landmarkTypes";
+import { LandmarkFilter } from "../components/LandmarkFilter";
 
 export const Landmarks = () => {
   const [landmarks, setLandmarks] = useState<LandmarkData[]>([]);
+  const [filteredLandmarks, setFilteredLandmarks] = useState<LandmarkData[]>(
+    []
+  );
   const [loading, setLoading] = useState(true);
   const [lastFetchedLandmark, setLastFetchedLandmark] =
     useState<DocumentData | null>(null);
   const [hasMoreLandmarks, setHasMoreLandmarks] = useState(false);
+  const [landmarkTypes, setLandmarkTypes] = useState<string[]>([]);
 
   const fetchLandmarks = async (fetchMore = false) => {
     try {
@@ -44,13 +49,25 @@ export const Landmarks = () => {
           data: doc.data() as LandmarkData["data"],
         });
       });
+      // Extract unique landmark types from fetched data
+      const fetchedTypes = fetchedLandmarks.map(
+        (landmark) => landmark.data.type
+      );
+      const uniqueTypes = [...new Set(fetchedTypes)]; // Use Set to get unique values
+
       if (fetchMore) {
         setLandmarks((prevLandmarks) => [
           ...prevLandmarks,
           ...fetchedLandmarks,
         ]);
+        setFilteredLandmarks((prevLandmarks) => [
+          ...prevLandmarks,
+          ...fetchedLandmarks,
+        ]);
       } else {
         setLandmarks(fetchedLandmarks);
+        setFilteredLandmarks(fetchedLandmarks);
+        setLandmarkTypes(uniqueTypes);
         const lastVisible = querySnap.docs[querySnap.docs.length - 1];
         setLastFetchedLandmark(lastVisible);
       }
@@ -71,6 +88,10 @@ export const Landmarks = () => {
     fetchLandmarks(true);
   };
 
+  const handleFilterChange = (filteredLandmarks: LandmarkData[]) => {
+    setFilteredLandmarks(filteredLandmarks);
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-3">
       <h1 className="text-3xl text-center mt-6 mb-6 font-bold text-secondary-color">
@@ -81,8 +102,16 @@ export const Landmarks = () => {
       ) : landmarks?.length > 0 ? (
         <>
           <main>
+            <div className="flex justify-between">
+              <LandmarkFilter
+                landmarks={landmarks}
+                landmarkTypes={landmarkTypes}
+                onFilterChange={handleFilterChange}
+              />
+              {/* <Sort onSortChange={handleSortChange} subCategory={subCategory} /> */}
+            </div>
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-              {landmarks.map((landmark) => {
+              {filteredLandmarks.map((landmark) => {
                 return (
                   <LandmarkItem
                     key={landmark.id}
