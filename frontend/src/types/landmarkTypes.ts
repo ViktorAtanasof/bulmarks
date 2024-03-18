@@ -36,3 +36,9 @@ export type LikeLandmarkProps = {
 export type FavouriteLandmarkProps = {
     id: string;
 };
+
+export type LandmarkFilterProps = {
+    landmarks: LandmarkData[];
+    landmarkTypes: string[];
+    onFilterChange: (filteredLandmarks: LandmarkData[]) => void;
+}
