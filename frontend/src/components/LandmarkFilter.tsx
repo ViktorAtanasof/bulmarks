@@ -44,23 +44,38 @@ export const LandmarkFilter = ({
   };
 
   return (
-    <div className="">
-      <h4>Filter by Size:</h4>
-      <select value={selectedSize} onChange={handleSizeChange} name="size">
-        <option value="">All Sizes</option>
-        <option value="small">Small</option>
-        <option value="large">Large</option>
-      </select>
-
-      <h4>Filter by Type:</h4>
-      <select value={selectedType} onChange={handleTypeChange} name="type">
-        <option value="">All Types</option>
-        {landmarkTypes.map((type) => (
-          <option key={type} value={type}>
-            {type}
-          </option>
-        ))}
-      </select>
+    <div className="flex flex-col md:flex-row gap-3">
+      <div className="flex flex-col gap-2">
+        <h4 className="text-secondary-color text-lg font-medium">Filter by Size:</h4>
+        <select
+          name="size"
+          className="rounded-md border border-gray-300 pl-3 pr-9 dark:bg-primary-color text-secondary-color
+          focus:ring-2 focus:ring-accent-color"
+          value={selectedSize}
+          onChange={handleSizeChange}
+        >
+          <option value="">All Sizes</option>
+          <option value="small">Small</option>
+          <option value="large">Large</option>
+        </select>
+      </div>
+      <div className="flex flex-col gap-2">
+        <h4 className="text-secondary-color text-lg font-medium">Filter by Type:</h4>
+        <select
+          name="type"
+          className="rounded-md border border-gray-300 pl-3 pr-9 dark:bg-primary-color text-secondary-color
+          focus:ring-2 focus:ring-accent-color"
+          value={selectedType}
+          onChange={handleTypeChange}
+        >
+          <option value="">All Types</option>
+          {landmarkTypes.map((type) => (
+            <option key={type} value={type}>
+              {type}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   );
 };
